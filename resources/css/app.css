@@ -1,0 +1,14 @@
+.reminders-container {
+    overflow: auto;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  }
+
+  .reminders-container::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+
+  #map {
+    height: 100%;
+    width: 100%;
+  }

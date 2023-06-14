@@ -1,0 +1,40 @@
+Dashboard Panel
+    - Profile UI (Edit account details [Name, Email, Password, and Profile Pic])
+
+    - Quick Summaries
+        - Total Registered Tourists
+            - Counter
+            - Graph
+
+        - Total Reservations
+            - Counter
+            - Graph
+
+        - Total Tourists to Guide
+            - Counter
+            - Graph
+
+    - Tourists Visited Graph
+        - Current year
+        - Previous year
+
+    - Reminders
+
+Reservations Panel
+    - Fetching all reservations
+    - Paginating table
+
+Registered Tourists Panel
+    - Fetching all registered tourists
+    - Paginating table
+    - Add new tourist
+
+Assigned Tour Guides Panel
+    - Fetching all assigned tour guides
+    - Paginating table
+    - Assign tour guide to the tourist(s)
+
+Live Tracking Panel
+    - Listening to all user locations using socket [Pusher.js]
+    - Plotting all user locations on the map
+    - Fix the radius of the geofence on the map
