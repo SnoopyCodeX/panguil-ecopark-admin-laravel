@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91b04dfbb4f673155baa3668667aafce",
+    "content-hash": "38a773ef1c1eb792b2b16dcf4592db53",
     "packages": [
         {
             "name": "brick/math",
@@ -3387,6 +3387,57 @@
             "time": "2023-04-15T23:01:58+00:00"
         },
         {
+            "name": "snoopycodex/laravel-set-env-fork",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SnoopyCodeX/laravel-set-env-fork.git",
+                "reference": "45baac82c29b5a63ed037754f2278c7e0a5fd450"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SnoopyCodeX/laravel-set-env-fork/zipball/45baac82c29b5a63ed037754f2278c7e0a5fd450",
+                "reference": "45baac82c29b5a63ed037754f2278c7e0a5fd450",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^10.4",
+                "illuminate/support": "^10.4"
+            },
+            "type": "laravel-package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SoulDoit\\SetEnv\\Providers\\SetEnvServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SoulDoit\\SetEnv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Syamsoul Azrien",
+                    "email": "syamsoulazrien.miat@gmail.com"
+                },
+                {
+                    "name": "SnoopyCodeX",
+                    "email": "extremeclasherph@gmail.com"
+                }
+            ],
+            "description": "Easily update or insert Laravel environment variable with Artisan command",
+            "support": {
+                "source": "https://github.com/SnoopyCodeX/laravel-set-env-fork/tree/1.0.6"
+            },
+            "time": "2023-06-17T03:25:51+00:00"
+        },
+        {
             "name": "symfony/console",
             "version": "v6.3.0",
             "source": {
@@ -5902,16 +5953,16 @@
     "packages-dev": [
         {
             "name": "fakerphp/faker",
-            "version": "v1.22.0",
+            "version": "v1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "f85772abd508bd04e20bb4b1bbe260a68d0066d2"
+                "reference": "e3daa170d00fde61ea7719ef47bb09bb8f1d9b01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/f85772abd508bd04e20bb4b1bbe260a68d0066d2",
-                "reference": "f85772abd508bd04e20bb4b1bbe260a68d0066d2",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/e3daa170d00fde61ea7719ef47bb09bb8f1d9b01",
+                "reference": "e3daa170d00fde61ea7719ef47bb09bb8f1d9b01",
                 "shasum": ""
             },
             "require": {
@@ -5964,9 +6015,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.22.0"
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.23.0"
             },
-            "time": "2023-05-14T12:31:37+00:00"
+            "time": "2023-06-12T08:44:38+00:00"
         },
         {
             "name": "filp/whoops",
