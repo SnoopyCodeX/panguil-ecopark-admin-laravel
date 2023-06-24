@@ -200,7 +200,7 @@ $(function() {
 
 
   // New Customers Chart
-  if($('#customersChart').length) {
+  /* if($('#total_rt_chart').length) {
     var options1 = {
       chart: {
         type: "line",
@@ -214,7 +214,7 @@ $(function() {
         data: [3844, 3855, 3841, 3867, 3822, 3843, 3821, 3841, 3856, 3827, 3843]
       }],
       xaxis: {
-        type: 'datetime',
+        // type: 'datetime',
         categories: ["Jan 01 2022", "Jan 02 2022", "Jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022",],
       },
       stroke: {
@@ -226,8 +226,8 @@ $(function() {
       },
       colors: [colors.primary],
     };
-    new ApexCharts(document.querySelector("#customersChart"),options1).render();
-  }
+    new ApexCharts(document.querySelector("#total_rt_chart"),options1).render();
+  } */
   // New Customers Chart - END
 
 
