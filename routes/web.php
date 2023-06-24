@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,15 +14,16 @@ use App\Http\Controllers\DashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware('guest')->group(function() {
-    Route::get('/', [AuthController::class, 'login'])->name('/');
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/login', [AuthController::class, 'loginPost'])->name('login');
+Route::middleware('guest')->controller(AuthController::class)->group(function() {
+    Route::get('/', 'login')->name('/');
+    Route::get('/login', 'login')->name('login');
+
+    Route::post('/login', 'loginPost')->name('login');
 });
 
-Route::middleware('auth')->group(function() {
-    Route::get('/admin', fn () => redirect('/admin/dashboard'));
+Route::middleware('auth')->prefix('admin')->group(function() {
+    Route::get('/', fn () => redirect('/admin/dashboard'));
 
-    Route::get('/admin/account/logout', [AuthController::class, 'logout'])->name('admin.logout');
-    Route::get('/admin/{page}', [AdminController::class, 'page']);
+    Route::get('/account/logout', [AuthController::class, 'logout'])->name('admin.logout');
+    Route::get('/{page}', [AdminController::class, 'showPage']);
 });
