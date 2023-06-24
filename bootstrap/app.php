@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,11 @@
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
+
+if (isset($_SERVER['HTTP_HOST'])) {
+    $scheme = env('APP_ENV') == 'local' ? 'http' : 'https';
+    $app->instance('ASSET_URL', $scheme . '://' . $_SERVER['HTTP_HOST']);
+}
 
 /*
 |--------------------------------------------------------------------------
