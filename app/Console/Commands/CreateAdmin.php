@@ -26,6 +26,9 @@ class CreateAdmin extends Command
      */
     public function handle()
     {
+        $this->info('Generating key for laravel...');
+        $this->call('key:generate', []);
+
         $this->call('db:seed', []);
 
         $message1 = 'Default admin account has been successfully created!';
