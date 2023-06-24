@@ -62,7 +62,7 @@
                                             </div>
                                         @endif
 
-                                        <form class="forms-sample" action="{{ route('login') }}" method="POST" autocomplete="off">
+                                        <form class="forms-sample" action="{{ route('login') }}" method="POST">
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="userEmail" class="form-label">Email address</label>
