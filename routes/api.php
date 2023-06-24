@@ -15,13 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->group(function() {
-    Route::get('/user', function(Request $request) {
-        if(!auth()->check())
-            return response()->json(['message' => 'Invalid authorization token provided!']);
-
-        return response()->json(['sender' => $request->user()]);
-    });
-
-    Route::get('/admin/dashboard/quicksummaries', [DashboardController::class, 'quickSummaries']);
-});
+// Route::middleware('auth:api')->group(function() {
+//     Route::get('/admin/dashboard/quicksummaries', [DashboardController::class, 'quickSummaries'])->name('api.dashboard.quickSummaries');
+//     Route::get('/admin/dashboard/touristsVisited', [DashboardController::class, 'totalTouristsVisited'])->name('api.dashboard.touristsVisited');
+//     Route::get('/admin/dashboard/reminders', [DashboardController::class, 'reminders'])->name('api.dashboard.reminders');
+// });
