@@ -56,6 +56,16 @@
                                         <a href="{{ route('/') }}" class="noble-ui-logo logo-light d-block mb-2"><span class="mdi mdi-leaf"></span>EcoPark <span>Admin Panel</span></a>
                                         <h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
 
+                                        @if($errors->any())
+                                            <div class="alert alert-danger" role="alert">
+                                                <ul>
+                                                    @foreach($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
                                         @if(Session::has('error'))
                                             <div class="alert alert-danger" role="alert">
                                                 {{ Session::get('error') }}
