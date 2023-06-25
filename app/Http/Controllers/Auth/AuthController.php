@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\Auth\UserLogoutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Support\Facades\Hash;
 // use Illuminate\Support\Facades\Validator;
 
@@ -43,23 +46,22 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function loginPost(Request $request)
+    public function loginPost(UserLoginRequest $loginRequest)
     {
-        $remember = $request->remember_me == "on" ?: false;
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
+        $loginRequest->validated();
 
-        if(Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect('/admin/dashboard')->with('success', $request->all());
+        $credentials = $loginRequest->safe()->only(['email', 'password']);
+        $remember = $loginRequest->safe()->only('remember_me')['remember_me'] ?? 'off';
+
+        if(Auth::attempt($credentials, $remember == 'on')) {
+            $loginRequest->session()->regenerate();
+            return redirect('/admin/dashboard')->with('success', $loginRequest->all());
         }
 
         return back()->with('error', 'Failed to login, email or password is incorrect!')->withInput();
     }
 
-    public function logout(Request $request)
+    public function logout(UserLogoutRequest $request)
     {
         Auth::logout();
         Auth::forgetUser();
