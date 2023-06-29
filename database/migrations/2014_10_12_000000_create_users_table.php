@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('type', ['tourist', 'tour_guide', 'admin']);
-            $table->string('api_token', 80)->unique()->nullable();
+            $table->string('photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
