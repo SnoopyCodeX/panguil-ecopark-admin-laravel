@@ -11,7 +11,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "snoopycodex/laravel-set-env-fork": "^1.0"
+        "snoopycodex/laravel-set-env-fork": "^1.0",
+        "yajra/laravel-datatables": "^10.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
