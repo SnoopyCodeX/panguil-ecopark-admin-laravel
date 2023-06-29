@@ -47,8 +47,13 @@ class UpdateProfileRequest extends FormRequest
                 $filename = Carbon::now()->format('Y_m_d_H_i_s-') . str_replace(' ', '_', $profilePhoto->getClientOriginalName());
                 $directory = public_path('uploads/profiles');
 
-                // If directory doesn't exist, create it.
-                File::makeDirectory($directory, 0755, true);
+                // Remove old profile photo from the uploads folder
+                if($user->photo != null)
+                    @unlink(public_path('uploads/profiles/' . $user->photo));
+
+                // If directory doesn't exist, create it
+                if(!File::exists($directory) && !File::isDirectory($directory))
+                    File::makeDirectory($directory, 0755, true);
 
                 $profilePhoto->move($directory, $filename);
                 $user->photo = $filename;

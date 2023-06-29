@@ -1,383 +1,165 @@
 @extends('admin.index')
 
 @section('profile-css')
+    <link rel="stylesheet" href="{{ asset('assets/vendors/dropify/dist/dropify.min.css') }}">
+    <link href="{{ asset('assets/vendors/toastr.js/toastr.min.css') }}" rel="stylesheet" />
 @endsection
 
 
 @section('profile-scripts')
+    <script src="{{ asset('assets/vendors/dropify/dist/dropify.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/toastr.js/toastr.min.js') }}"></script>
+    <script>
+        $(document).on("DOMContentLoaded", function() {
+            $('#profilePhotoDropify').dropify();
+
+            let oldFormData = $('#updateForm').serialize();
+
+            $('#updateForm').on('submit', function(e) {
+                if($('#updateForm').serialize() == oldFormData && $('#profilePhotoDropify')[0].files.length === 0)
+                    e.preventDefault();
+            });
+
+            $('#password').on('change', function() {
+                if($('#updateForm').serialize() != oldFormData)
+                    $('#confirm_password').prop('required', 'true');
+                else
+                    $('#confirm_password').removeAttr('required');
+            });
+
+            $('#confirm_password').on('change', function() {
+                if($('#updateForm').serialize() != oldFormData)
+                    $('#password').prop('required', 'true');
+                else
+                    $('#password').removeAttr('required');
+            });
+
+            @if(Session::has('error'))
+                toastr.error("{{ Session::get('error') }}");
+            @elseif(Session::has('success'))
+                toastr.success("{{ Session::get('success') }}");
+            @endif
+        });
+    </script>
 @endsection
 
 @section('profile')
-<div class="page-content">
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="position-relative">
-                    <figure class="overflow-hidden mb-0 d-flex justify-content-center">
-                        <img src="https://via.placeholder.com/1560x370"class="rounded-top" alt="profile cover">
-                    </figure>
-                    <div
-                        class="d-flex justify-content-between align-items-center position-absolute top-90 w-100 px-2 px-md-4 mt-n4">
-                        <div>
-                            <img class="wd-70 rounded-circle" src="https://via.placeholder.com/100x100" alt="profile">
-                            <span class="h4 ms-3 text-dark">{{ Auth::user()->name }}</span>
+    <div class="page-content">
+        <div class="row profile-body">
+            <!-- left wrapper start -->
+            <div class="d-md-block col-md-4 col-xl-3 left-wrapper mb-4">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center mb-2">
+                            <img class="flex-item wd-100 rounded-circle mb-2" src="{{ asset('uploads/profiles/' . Auth::user()->photo) ?? 'https://via.placeholder.com/100x100' }}" alt="profile">
+                            <h6 class="flex-item card-title mb-0">{{ Auth::user()->name }}</h6>
                         </div>
-                        <div class="d-none d-md-block">
-                            <button class="btn btn-primary btn-icon-text">
-                                <i data-feather="edit" class="btn-icon-prepend"></i> Edit profile
-                            </button>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Age:</label>
+                            <p class="text-muted">{{ Auth::user()->age }} yrs. old</p>
                         </div>
-                    </div>
-                </div>
-                {{-- <div class="d-flex justify-content-center p-3 rounded-bottom">
-                    <ul class="d-flex align-items-center m-0 p-0">
-                        <li class="d-flex align-items-center active">
-                            <i class="me-1 icon-md text-primary" data-feather="columns"></i>
-                            <a class="pt-1px d-none d-md-block text-primary" href="#">Timeline</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <i class="me-1 icon-md" data-feather="user"></i>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">About</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <i class="me-1 icon-md" data-feather="users"></i>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Friends <span
-                                    class="text-muted tx-12">3,765</span></a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <i class="me-1 icon-md" data-feather="image"></i>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Photos</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <i class="me-1 icon-md" data-feather="video"></i>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Videos</a>
-                        </li>
-                    </ul>
-                </div> --}}
-            </div>
-        </div>
-    </div>
-    <div class="row profile-body">
-        <!-- left wrapper start -->
-        <div class="d-none d-md-block col-md-4 col-xl-3 left-wrapper">
-            <div class="card rounded">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <h6 class="card-title mb-0">About</h6>
-                        <div class="dropdown">
-                            <a type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                        data-feather="edit-2" class="icon-sm me-2"></i> <span class="">Edit</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                        data-feather="git-branch" class="icon-sm me-2"></i> <span
-                                        class="">Update</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye"
-                                        class="icon-sm me-2"></i> <span class="">View all</span></a>
-                            </div>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Gender:</label>
+                            <p class="text-muted">{{ Str::ucfirst(Auth::user()->gender) }}</p>
                         </div>
-                    </div>
-                    <p>Hi! I'm {{ Auth::user()->name }} the administrator at Panguil River Eco-Park Resort. I hope you enjoy your visit!
-                    </p>
-                    <div class="mt-3">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Joined:</label>
-                        <p class="text-muted">November 15, 2015</p>
-                    </div>
-                    <div class="mt-3">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Lives:</label>
-                        <p class="text-muted">Manila, Philippines</p>
-                    </div>
-                    <div class="mt-3">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Email:</label>
-                        <p class="text-muted">{{ Auth::user()->email }}</p>
-                    </div>
-                    <div class="mt-3">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Website:</label>
-                        <p class="text-muted">www.panguilecopark.com</p>
-                    </div>
-                    <div class="mt-3 d-flex social-links">
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <i data-feather="github"></i>
-                        </a>
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <i data-feather="twitter"></i>
-                        </a>
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <i data-feather="instagram"></i>
-                        </a>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Email Address:</label>
+                            <p class="text-muted">{{ Auth::user()->email }}</p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Updated On:</label>
+                            <p class="text-muted">{{ \Carbon\Carbon::parse(Auth::user()->updated_at)->format('D, M d, Y \@ h:m A') }}</p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Created On:</label>
+                            <p class="text-muted">{{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('D, M d, Y \@ h:m A') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- left wrapper end -->
-        <!-- middle wrapper start -->
-        <div class="col">
-            <h4 class="alert alert-danger d-block w-100 h-100 p-10 text-center d-flex justify-content-center align-items-center">
-                This entire profile page is still currently under development progress and still subject to further changes.
-            </h4>
-            {{-- <div class="row">
-                <div class="col-md-12 grid-margin">
-                    <div class="card rounded">
-                        <div class="card-header">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">1 min ago</p>
-                                    </div>
-                                </div>
-                                <div class="dropdown">
-                                    <a type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-lg pb-3px" data-feather="more-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="meh" class="icon-sm me-2"></i> <span
-                                                class="">Unfollow</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="corner-right-up" class="icon-sm me-2"></i> <span
-                                                class="">Go to post</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="share-2" class="icon-sm me-2"></i> <span
-                                                class="">Share</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="copy" class="icon-sm me-2"></i> <span class="">Copy
-                                                link</span></a>
-                                    </div>
-                                </div>
+            <!-- left wrapper end -->
+            <!-- right wrapper start -->
+            <div class="col mb-4">
+                <!-- Update Profile Information -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Update Account Information</h4>
+                        <p class="text-muted mb-3">Update profile information. Before submitting, please double check your info.</p>
+
+                        @if($errors->any())
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        @if (!empty($error))
+                                            <li>{{ $error }}</li>
+                                        @endif
+                                    @endforeach
+                                </ul>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-3 tx-14">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus
-                                minima delectus nemo unde quae recusandae assumenda.</p>
-                            <img class="img-fluid" src="https://via.placeholder.com/689x430" alt="">
-                        </div>
-                        <div class="card-footer">
-                            <div class="d-flex post-actions">
-                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                    <i class="icon-md" data-feather="heart"></i>
-                                    <p class="d-none d-md-block ms-2">Like</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                    <i class="icon-md" data-feather="message-square"></i>
-                                    <p class="d-none d-md-block ms-2">Comment</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted">
-                                    <i class="icon-md" data-feather="share"></i>
-                                    <p class="d-none d-md-block ms-2">Share</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card rounded">
-                        <div class="card-header">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">5 min ago</p>
-                                    </div>
-                                </div>
-                                <div class="dropdown">
-                                    <a type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-lg pb-3px" data-feather="more-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="meh" class="icon-sm me-2"></i> <span
-                                                class="">Unfollow</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="corner-right-up" class="icon-sm me-2"></i> <span
-                                                class="">Go to post</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="share-2" class="icon-sm me-2"></i> <span
-                                                class="">Share</span></a>
-                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                data-feather="copy" class="icon-sm me-2"></i> <span class="">Copy
-                                                link</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-3 tx-14">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            <img class="img-fluid" src="https://via.placeholder.com/689x430" alt="">
-                        </div>
-                        <div class="card-footer">
-                            <div class="d-flex post-actions">
-                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                    <i class="icon-md" data-feather="heart"></i>
-                                    <p class="d-none d-md-block ms-2">Like</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                    <i class="icon-md" data-feather="message-square"></i>
-                                    <p class="d-none d-md-block ms-2">Comment</p>
-                                </a>
-                                <a href="javascript:;" class="d-flex align-items-center text-muted">
-                                    <i class="icon-md" data-feather="share"></i>
-                                    <p class="d-none d-md-block ms-2">Share</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-        </div>
-        <!-- middle wrapper end -->
-        {{-- <!-- right wrapper start -->
-        <div class="d-none d-xl-block col-xl-3">
-            <div class="row">
-                <div class="col-md-12 grid-margin">
-                    <div class="card rounded">
-                        <div class="card-body">
-                            <h6 class="card-title">latest photos</h6>
-                            <div class="row ms-0 me-0">
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-2">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-0">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-0">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                                <a href="javascript:;" class="col-md-4 ps-1 pe-1">
-                                    <figure class="mb-0">
-                                        <img class="img-fluid rounded" src="https://via.placeholder.com/96x96"
-                                            alt="">
-                                    </figure>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 grid-margin">
-                    <div class="card rounded">
-                        <div class="card-body">
-                            <h6 class="card-title">suggestions for you</h6>
-                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center hover-pointer">
-                                    <img class="img-xs rounded-circle" src="https://via.placeholder.com/37x37"
-                                        alt="">
-                                    <div class="ms-2">
-                                        <p>Mike Popescu</p>
-                                        <p class="tx-11 text-muted">12 Mutual Friends</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon border-0"><i data-feather="user-plus"></i></button>
+                        @endif
+
+                        <form id="updateForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.profile.update') }}">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input id="name" class="form-control" name="name" type="text" placeholder="Enter fullname..." value="{{ old('name') }}">
                             </div>
 
-                        </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input id="age" class="form-control" name="age" type="number" placeholder="Enter your age..." value="{{ old('age') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input id="email" class="form-control" name="email" type="email" placeholder="Enter email address..." value="{{ old('email') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Gender</label>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" name="gender" value="male" id="gender1" @if(!empty(old('gender')) && old('gender') === 'male') checked @endif>
+                                        <label class="form-check-label" for="gender1">
+                                            Male
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" name="gender" value="female" id="gender2" @if(!empty(old('gender')) && old('gender') === 'female') checked @endif>
+                                        <label class="form-check-label" for="gender2">
+                                            Female
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password <i class="text-muted">(Required only if you want to update your password)</i></label>
+                                <input id="password" class="form-control" name="password" type="password" placeholder="Enter your new password..." value="{{ old('password') }}">
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="confirm_password" class="form-label">Confirm password <i class="text-muted">(Required only if you want to update your password)</i></label>
+                                <input id="confirm_password" class="form-control" name="password_confirmation" type="password" placeholder="Confirm new password..." value="{{ old('password_confirmation') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="profilePhotoDropify" class="form-label">Update Profile Photo</label>
+                                <p class="text-muted mb-3">Drag and drop your profile photo below.</p>
+                                <input type="file" id="profilePhotoDropify" name="profile-photo" accept="image/*" data-allowed-file-extensions="png jpg jpeg" @if(!empty(old('profile-photo'))) data-default-file='{{ old('profile-photo') }}' @endif>
+                            </div>
+
+                            <div class="d-grid">
+                                <input class="btn btn-primary" type="submit" value="Update Account">
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <!-- Update profile information -->
             </div>
+            <!-- right wrapper end -->
         </div>
-        <!-- right wrapper end --> --}}
     </div>
-</div>
 @endsection
