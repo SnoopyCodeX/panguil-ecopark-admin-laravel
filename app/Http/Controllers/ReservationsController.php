@@ -6,16 +6,10 @@ use Illuminate\Http\Request;
 
 class ReservationsController extends Controller
 {
-    /**
-     * The name of the .blade.php
-     * file to be rendered
-     */
-    protected string $view = 'reservations';
-
-    public function show(Request $request)
+    public function index(Request $request)
     {
-        $page = $this->view;
+        $page = 'reservations';
 
-        return view("admin.$page", compact('page'));
+        return view("admin.reservations", compact('page'));
     }
 }

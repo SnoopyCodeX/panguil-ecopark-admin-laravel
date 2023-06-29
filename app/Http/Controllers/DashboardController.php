@@ -12,23 +12,17 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    /**
-     * The name of the .blade.php
-     * file to be rendered
-     */
-    protected string $view = 'dashboard';
-
-    public function show(Request $request)
+    public function index(Request $request)
     {
         $quickSummaries = $this->quickSummaries();
         $totalTouristsVisited = $this->totalTouristsVisited();
         $reminders = Reminder::paginate(10);
-        $page = $this->view;
+        $page = 'dashboard';
 
         if($request->ajax())
             return response()->json($reminders);
 
-        return view("admin.$page", compact('page', 'quickSummaries', 'totalTouristsVisited', 'reminders'));
+        return view("admin.dashboard", compact('page', 'quickSummaries', 'totalTouristsVisited', 'reminders'));
     }
 
     public function quickSummaries()

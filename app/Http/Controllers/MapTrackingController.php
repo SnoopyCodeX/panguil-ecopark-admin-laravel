@@ -6,16 +6,10 @@ use Illuminate\Http\Request;
 
 class MapTrackingController extends Controller
 {
-    /**
-     * The name of the .blade.php
-     * file to be rendered
-     */
-    protected string $view = 'tracking';
-
-    public function show(Request $request)
+    public function index(Request $request)
     {
-        $page = $this->view;
+        $page = 'tracking';
 
-        return view("admin.$page", compact('page'));
+        return view("admin.tracking", compact('page'));
     }
 }
