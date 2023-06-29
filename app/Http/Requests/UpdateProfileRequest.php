@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UpdateProfileRequest extends FormRequest
@@ -44,7 +45,7 @@ class UpdateProfileRequest extends FormRequest
 
         try {
             if($profilePhoto instanceof UploadedFile) {
-                $filename = Carbon::now()->format('Y_m_d_H_i_s-') . str_replace(' ', '_', $profilePhoto->getClientOriginalName());
+                $filename = Carbon::now()->format('Y_m_d_H_i_s-') . Str::slug($profilePhoto->getClientOriginalName(), '_');
                 $directory = public_path('uploads/profiles');
 
                 // Remove old profile photo from the uploads folder
