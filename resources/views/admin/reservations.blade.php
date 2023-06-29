@@ -7,7 +7,29 @@
 @section('reservations-scripts')
 <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
-<script src="{{ asset('assets/js/data-table.js') }}"></script>
+<script>
+    $(document).on("DOMContentLoaded", function() {
+        $("#reservationsTable").DataTable({
+            serverSide: true,
+            ajax: "{{ route('admin.reservations') }}",
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'name', name: 'name'},
+                {data: 'gender', name: 'gender'},
+                {data: 'age', name: 'age'},
+                {data: 'contact_number', name: 'contact_number'},
+                {data: 'created_at', name: 'created_at'},
+                {data: 'number_of_tourists', name: 'number_of_tourists'},
+                {data: 'assigned_tour_guide', name: 'assigned_tour_guide'},
+            ],
+            dom: '<"row"<"col-12 col-md-6"l><"col-12 col-md-6"f>>' +
+                    '<"row"<"col-12"t>>' +
+                    '<"row"<"col-12 col-md-5"i><"col-12 col-md-7"p>>',
+            lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
+            searching: true,
+        });
+    });
+</script>
 @endsection
 
 @section('reservations')
@@ -27,7 +49,7 @@
                     <h6 class="card-title">Tourist Reservations</h6>
                     <p class="text-muted mb-3">List of tourist reservations along with their complete information and assigned tour guide.</p>
                     <div class="table-responsive">
-                        <table id="dataTableExample" class="table">
+                        <table id="reservationsTable" class="table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -41,36 +63,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>Male</td>
-                                    <td>25 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-25 / 10:30 AM</td>
-                                    <td>10</td>
-                                    <td>Mang Berting</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Mary Jane Dela Cruz</td>
-                                    <td>Female</td>
-                                    <td>28 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-15 / 10:30 AM</td>
-                                    <td>3</td>
-                                    <td>Mang Arnold</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Robert Santos</td>
-                                    <td>Male</td>
-                                    <td>30 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-05 / 10:30 AM</td>
-                                    <td>5</td>
-                                    <td>Mang Diego</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
