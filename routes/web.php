@@ -29,7 +29,7 @@ Route::middleware('guest')->controller(AuthController::class)->group(function() 
 });
 
 Route::middleware('auth')->prefix('admin')->group(function() {
-    Route::get('/', fn () => redirect('/admin/dashboard'));
+    Route::get('/', fn () => redirect('/admin/dashboard'))->name('admin');
 
     Route::get('/account/logout', [AuthController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -37,9 +37,11 @@ Route::middleware('auth')->prefix('admin')->group(function() {
 
     Route::get('/registered-tourists', [RegisteredTouristsController::class, 'index'])->name('admin.registered-tourists');
     Route::get('/add-tourist', [AddTouristsController::class, 'index'])->name('admin.add-tourist');
+    Route::post('/add-tourist/store', [AddTouristsController::class, 'store'])->name('admin.add-tourist.store');
 
     Route::get('/tour-guides', [TourGuidesController::class, 'index'])->name('admin.tour-guides');
     Route::get('/assign-tour-guide', [AssignTourGuidesController::class, 'index'])->name('admin.assign-tour-guide');
+    Route::post('/assign-tour-guide/store', [AssignTourGuidesController::class, 'store'])->name('admin.assign-tour-guide.store');
 
     Route::get('/tracking', [MapTrackingController::class, 'index'])->name('admin.map-tracking');
 
