@@ -20,18 +20,34 @@
                     e.preventDefault();
             });
 
-            $('#password').on('change', function() {
-                if($('#updateForm').serialize() != oldFormData)
+            $('#old_password').on('change', function() {
+                if($('#updateForm').serialize() != oldFormData) {
                     $('#confirm_password').prop('required', 'true');
-                else
+                    $('#new_password').prop('required', 'true');
+                } else {
                     $('#confirm_password').removeAttr('required');
+                    $('#new_password').removeAttr('required');
+                }
+            });
+
+            $('#new_password').on('change', function() {
+                if($('#updateForm').serialize() != oldFormData) {
+                    $('#confirm_password').prop('required', 'true');
+                    $('#old_password').prop('required', 'true');
+                } else {
+                    $('#confirm_password').removeAttr('required');
+                    $('#old_password').removeAttr('required');
+                }
             });
 
             $('#confirm_password').on('change', function() {
-                if($('#updateForm').serialize() != oldFormData)
-                    $('#password').prop('required', 'true');
-                else
-                    $('#password').removeAttr('required');
+                if($('#updateForm').serialize() != oldFormData) {
+                    $('#new_password').prop('required', 'true');
+                    $('#old_password').prop('required', 'true');
+                } else {
+                    $('#new_password').removeAttr('required');
+                    $('#old_password').removeAttr('required');
+                }
             });
 
             @if(Session::has('error'))
@@ -136,8 +152,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password <i class="text-muted">(Required only if you want to update your password)</i></label>
-                                <input id="password" class="form-control" name="password" type="password" placeholder="Enter your new password..." value="{{ old('password') }}">
+                                <label for="old_password" class="form-label">Old Password <i class="text-muted">(Required only if you want to update your password)</i></label>
+                                <input id="old_password" class="form-control" name="old_password" type="password" placeholder="Enter your old password..." value="{{ old('old_password') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="new_password" class="form-label">New Password <i class="text-muted">(Required only if you want to update your password)</i></label>
+                                <input id="new_password" class="form-control" name="password" type="password" placeholder="Enter your new password..." value="{{ old('password') }}">
                             </div>
 
                             <div class="mb-5">

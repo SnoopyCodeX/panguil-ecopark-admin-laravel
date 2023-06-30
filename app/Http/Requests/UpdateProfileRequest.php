@@ -33,6 +33,7 @@ class UpdateProfileRequest extends FormRequest
             'age' => ['integer', 'nullable'],
             'gender' => ['string', 'nullable'],
             'password' => ['string', 'nullable', 'min:4', 'confirmed'],
+            'old_password' => ['string', 'nullable', 'min:4'],
             'profile-photo' => ['file', 'nullable', 'mimes:png,jpg'],
         ];
     }
