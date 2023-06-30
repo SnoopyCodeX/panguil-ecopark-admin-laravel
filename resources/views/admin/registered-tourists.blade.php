@@ -7,7 +7,28 @@
 @section('registered-tourists-scripts')
 <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
-<script src="{{ asset('assets/js/data-table.js') }}"></script>
+<script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
+<script>
+    $(document).on("DOMContentLoaded", function() {
+        $("#registeredTouristsTable").DataTable({
+            serverSide: true,
+            ajax: "{{ route('admin.registered-tourists') }}",
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'name', name: 'name'},
+                {data: 'gender', name: 'gender', render: (data) => data.charAt(0).toUpperCase() + data.slice(1)},
+                {data: 'age', name: 'age', render: (data) => `${data} yrs. old`},
+                {data: 'cellphone_number', name: 'cellphone_number', render: (data) => data ?? 'N/A'},
+                {data: 'assign_datetime', name: 'assign_datetime', render: (data) => data != null ? moment(data).format('YYYY-MM-DD / hh:mm A') : 'N/A'}
+            ],
+            dom: '<"row"<"col-12 col-md-6"l><"col-12 col-md-6"f>>' +
+                    '<"row"<"col-12"t>>' +
+                    '<"row"<"col-12 col-md-5"i><"col-12 col-md-7"p>>',
+            lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
+            searching: true,
+        });
+    });
+</script>
 @endsection
 
 @section('registered-tourists')
@@ -27,7 +48,7 @@
                     <h6 class="card-title">Registered Tourists</h6>
                     <p class="text-muted mb-3">List of registered tourists and their full information.</p>
                     <div class="table-responsive">
-                        <table id="dataTableExample" class="table">
+                        <table id="registeredTouristsTable" class="table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -39,30 +60,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>Male</td>
-                                    <td>25 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-25 / 10:30 AM</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Mary Jane Dela Cruz</td>
-                                    <td>Female</td>
-                                    <td>28 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-15 / 10:30 AM</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Robert Santos</td>
-                                    <td>Male</td>
-                                    <td>30 yrs old</td>
-                                    <td>09123456789</td>
-                                    <td>2023-04-05 / 10:30 AM</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
