@@ -7,6 +7,7 @@
 @section('reservations-scripts')
 <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
+<script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
 <script>
     $(document).on("DOMContentLoaded", function() {
         $("#reservationsTable").DataTable({
@@ -15,10 +16,10 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
-                {data: 'gender', name: 'gender'},
-                {data: 'age', name: 'age'},
-                {data: 'contact_number', name: 'contact_number'},
-                {data: 'created_at', name: 'created_at'},
+                {data: 'gender', name: 'gender', render: (data) => data.charAt(0).toUpperCase() + data.slice(1)},
+                {data: 'age', name: 'age', render: (data) => `${data} yrs. old`},
+                {data: 'contact_number', name: 'contact_number', render: (data) => data ?? 'N/A'},
+                {data: 'created_at', name: 'created_at', render: (data) => moment(data).format('YYYY-MM-DD / hh:mm A')},
                 {data: 'number_of_tourists', name: 'number_of_tourists'},
                 {data: 'assigned_tour_guide', name: 'assigned_tour_guide'},
             ],
