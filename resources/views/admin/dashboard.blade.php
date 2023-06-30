@@ -96,13 +96,16 @@
             }
 
             feather.replace();
-
-            $('#reminders-container').scroll(function() {
-                if(isScrolledToBottom()){
-                    loadMoreData();
-                }
-            });
+            $('#reminders-container').scroll(scrollListener);
         });
+
+        let scrollListener = () => {
+            if(isScrolledToBottom() && !isLoading) {
+                $('#reminders-container').off('scroll');
+
+                loadMoreData();
+            }
+        };
 
         let renderQuickSummaryChartFor = (chartID, data) => {
             let options = {
@@ -262,22 +265,16 @@
 
             $.ajax({
                 url: url,
-                type: 'GET',
+                method: 'GET',
                 dataType: 'json',
-                beforeSend: function() {
+                beforeSend: function(jqXHR) {
                     $('#load-more').text('Loading more...');
                 },
                 success: function(response) {
                     $('#load-more').remove();
                     let data = response.data;
 
-                    // 2 seconds timeout to prevent duplicate
-                    // request to the server
-                    setTimeout(() => {
-                        isLoading = false;
-                    }, 2000);
-
-                    data.forEach(reminder => {
+                    for(let reminder of data) {
                         $('#reminders-container').append(`
                             <a href="javascript:;" class="d-flex align-items-center border-bottom py-3">
                                 <div class="me-3">
@@ -293,7 +290,7 @@
                                 </div>
                             </a>
                         `);
-                    });
+                    };
 
                     // Remove scroll listener on the #reminders-container
                     // if we have reached the last page
@@ -305,10 +302,15 @@
                                 <a class='text-center' href='#' data-next="${response.next_page_url}">Scroll down to load more...</a>
                             </div>
                         `);
+
+                        $('#reminders-container').scroll(scrollListener);
                     }
+
+                    isLoading = false;
                 },
                 error: function(response) {
                     console.error(response);
+                    isLoading = false;
                 }
             });
         };

@@ -16,11 +16,14 @@ class DashboardController extends Controller
     {
         $quickSummaries = $this->quickSummaries();
         $totalTouristsVisited = $this->totalTouristsVisited();
+
         $reminders = Reminder::paginate(10);
+        $reminders->setPath('/admin/dashboard/');
+
         $page = 'dashboard';
 
         if($request->ajax())
-            return response()->json($reminders);
+            return $reminders;
 
         return view("admin.dashboard", compact('page', 'quickSummaries', 'totalTouristsVisited', 'reminders'));
     }
