@@ -1,4 +1,2 @@
 Live Tracking Panel
-    - Listening to all user locations using socket [Pusher.js]
-    - Plotting all user locations on the map
     - Fix the radius of the geofence on the map
