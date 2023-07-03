@@ -2,6 +2,7 @@ import Pusher from 'pusher-js';
 import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function() {
+    const ecoParkLtLng = [14.413447, 121.480293];
     let userLocations = JSON.parse(window.sessionStorage.getItem('user-locations')) ?? {};
     let url = window.location.href;
     let markers = {};
@@ -15,12 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
         for(let id in userLocations) {
             let userLocationData = userLocations[id];
             let { latitude, longitude, name } = userLocationData;
+            let distanceFromCenter = map.distance(ecoParkLtLng, [latitude, longitude]).toFixed(2);
 
-            if(markers[id] === undefined) {
+            if(markers[id] === undefined)
                 markers[id] = L.marker([latitude, longitude], {title: name}).addTo(map);
-                markers[id].bindPopup(name);
-            } else
+            else
                 markers[id].setLatLng([latitude, longitude]).update();
+
+            markers[id].bindPopup(`<strong>Name:</strong> ${name}<br/><strong>Distance:</strong> ${distanceFromCenter}m away`).update();
         }
     };
 
@@ -33,18 +36,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if(url.endsWith('tracking')) {
             let { latitude, longitude, name } = data.data;
+            let distanceFromCenter = map.distance(ecoParkLtLng, [latitude, longitude]).toFixed(2);
 
             // Create/Update marker on the map
-            if(markers[data.id] === undefined) {
+            if(markers[data.id] === undefined)
                 markers[data.id] = L.marker([latitude, longitude], {title: name}).addTo(map);
-                markers[data.id].bindPopup(name);
-            } else
+            else
                 markers[data.id].setLatLng([latitude, longitude]).update();
+
+            markers[data.id].bindPopup(`<strong>Name:</strong> ${name}<br/><strong>Distance:</strong> ${distanceFromCenter}m away`).update();
         }
     });
 
     if(url.endsWith('tracking')) {
-        map = L.map('map').setView([14.413447, 121.480293], 18);
+        map = L.map('map').setView(ecoParkLtLng, 18);
 
         let tile = L.tileLayer(`https://api.mapbox.com/styles/v1/snoopycodex/clir72wpr00ko01r854fsammn/tiles/256/{z}/{x}/{y}@2x?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`, {
             maxZoom: 19,
@@ -52,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             attribution: '&copy; <a href="http://www.mapbox.com/about/maps">MapBox</a> <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        let circle = L.circle([14.413447, 121.480293], {
+        let circle = L.circle(ecoParkLtLng, {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.3,
