@@ -2,7 +2,7 @@ import Pusher from 'pusher-js';
 import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function() {
-    let userLocations = JSON.parse(window.localStorage.getItem('user-locations')) ?? {};
+    let userLocations = JSON.parse(window.sessionStorage.getItem('user-locations')) ?? {};
     let url = window.location.href;
     let markers = {};
     let map = undefined;
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    let updateUserLocationsInLS = (newUserLocations) => window.localStorage.setItem('user-locations', JSON.stringify(newUserLocations));
+    let updateUserLocationsInLS = (newUserLocations) => window.sessionStorage.setItem('user-locations', JSON.stringify(newUserLocations));
 
     let mapChannel = pusher.subscribe('map-channel');
     mapChannel.bind('update-user-location', (data) => {
