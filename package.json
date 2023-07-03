@@ -11,6 +11,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "dropify": "^0.2.2"
+        "dropify": "^0.2.2",
+        "pusher-js": "^8.2.0"
     }
 }
