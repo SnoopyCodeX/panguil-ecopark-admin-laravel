@@ -13,18 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     let updateMap = () => {
-        for(let id in userLocations) {
-            let userLocationData = userLocations[id];
-            let { latitude, longitude, name } = userLocationData;
-            let distanceFromCenter = map.distance(ecoParkLtLng, [latitude, longitude]).toFixed(2);
+        for(let id in userLocations)
+            updateMarker(id, userLocations[id]);
+    };
 
-            if(markers[id] === undefined)
-                markers[id] = L.marker([latitude, longitude], {title: name}).addTo(map);
-            else
-                markers[id].setLatLng([latitude, longitude]).update();
+    let updateMarker = (id, data) => {
+        let { latitude, longitude, name } = data;
+        let distanceFromCenter = map.distance(ecoParkLtLng, [latitude, longitude]).toFixed(2);
 
-            markers[id].bindPopup(`<strong>Name:</strong> ${name}<br/><strong>Distance:</strong> ${distanceFromCenter}m away`).update();
-        }
+        if(markers[id] === undefined)
+            markers[id] = L.marker([latitude, longitude], {title: name}).addTo(map);
+        else
+            markers[id].setLatLng([latitude, longitude]).update();
+
+        markers[id].bindPopup(`<strong>Name:</strong> ${name}<br/><strong>Distance:</strong> ${distanceFromCenter}m away`).update();
     };
 
     let updateUserLocationsInLS = (newUserLocations) => window.sessionStorage.setItem('user-locations', JSON.stringify(newUserLocations));
@@ -34,18 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
         userLocations[data.id] = {...data.data};
         updateUserLocationsInLS(userLocations);
 
-        if(url.endsWith('tracking')) {
-            let { latitude, longitude, name } = data.data;
-            let distanceFromCenter = map.distance(ecoParkLtLng, [latitude, longitude]).toFixed(2);
-
-            // Create/Update marker on the map
-            if(markers[data.id] === undefined)
-                markers[data.id] = L.marker([latitude, longitude], {title: name}).addTo(map);
-            else
-                markers[data.id].setLatLng([latitude, longitude]).update();
-
-            markers[data.id].bindPopup(`<strong>Name:</strong> ${name}<br/><strong>Distance:</strong> ${distanceFromCenter}m away`).update();
-        }
+        if(url.endsWith('tracking'))
+            updateMarker(data.id, data.data);
     });
 
     if(url.endsWith('tracking')) {
