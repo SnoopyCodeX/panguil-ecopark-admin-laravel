@@ -14,7 +14,12 @@
                             <div class="d-flex justify-content-between">
                                 <h6 class="text-body mb-2">{{ $reminder->name }}</h6>
                                 <p class="text-muted tx-12">
-                                    {{ \Carbon\Carbon::parse($reminder->created_at)->format('h:i A') }}</p>
+                                    @if (\Carbon\Carbon::parse($reminder->created_at)->isPast())
+                                        {{ \Carbon\Carbon::parse($reminder->created_at)->diffForHumans() }}
+                                    @else
+                                        {{ \Carbon\Carbon::parse($reminder->created_at)->format('h:i A') }}
+                                    @endif
+                                </p>
                             </div>
                             <p class="text-muted tx-13">{{ $reminder->content }}</p>
                         </div>
