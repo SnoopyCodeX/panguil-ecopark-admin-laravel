@@ -10,6 +10,7 @@
     <!-- Plugin js for this page -->
     <script src="{{ asset('assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
     <!-- End plugin js for this page -->
 
     <script>
@@ -275,6 +276,11 @@
                     let data = response.data;
 
                     for(let reminder of data) {
+                        let hoursElapsed = Math.round(Math.round(moment().diff(moment(reminder.created_at)) / 1000) / 3600);
+                        let formattedCreatedAt = (hoursElapsed >= 24)
+                            ? moment(reminder.created_at).fromNow()
+                            : (new Date(reminder.created_at)).toLocaleTimeString('en-PH', {hour: 'numeric', minute: 'numeric', hour12: true});
+
                         $('#reminders-container').append(`
                             <a href="javascript:;" class="d-flex align-items-center border-bottom py-3">
                                 <div class="me-3">
@@ -284,7 +290,7 @@
                                 <div class="w-100">
                                     <div class="d-flex justify-content-between">
                                         <h6 class="text-body mb-2">${reminder.name}</h6>
-                                        <p class="text-muted tx-12">${(new Date(reminder.created_at)).toLocaleTimeString('en-PH', {hour: 'numeric', minute: 'numeric', hour12: true})}</p>
+                                        <p class="text-muted tx-12">${formattedCreatedAt}</p>
                                     </div>
                                     <p class="text-muted tx-13">${reminder.content}</p>
                                 </div>
