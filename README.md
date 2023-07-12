@@ -79,7 +79,7 @@ php artisan app:run-as-dev
 
 Hit `Ctrl+C` to stop and then execute it again. Then it will work, then just open `http://localhost:8000` in your browser. By default, the system is hosted on port `8000`.
 
-To run the system in development mode, you just do the same thing but with this command:
+To run the system in production mode, you just do the same thing but with this command:
 
 ```
 php artisan app:run-as-prod
