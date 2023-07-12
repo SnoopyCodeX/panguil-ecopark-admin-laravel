@@ -34,6 +34,13 @@ This admin system was built and made specifically for Panguil EcoPark and Resort
 
 ## Building Project
 
+Download dependencies:
+
+```
+composer install
+npm install
+```
+
 Run artisan command:
 
 ```
