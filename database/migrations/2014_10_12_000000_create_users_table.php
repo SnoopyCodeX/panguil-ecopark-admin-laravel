@@ -17,9 +17,10 @@ return new class extends Migration
             $table->integer('age');
             $table->enum('gender', ['male', 'female']);
             $table->string('cellphone_number', 12)->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->string('assign_datetime')->nullable();
             $table->enum('type', ['tourist', 'tour_guide', 'admin']);
             $table->string('photo')->nullable();
             $table->rememberToken();
