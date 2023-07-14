@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'tatel@gmail.com',
             'password' => Hash::make('test123'),
             'type' => 'admin',
-            'api_token' => \Illuminate\Support\Str::random(60),
         ]);
     }
 }

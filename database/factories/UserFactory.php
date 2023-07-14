@@ -28,7 +28,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make(fake()->sentence()),
             'type' => 'tourist',
-            'api_token' => \Illuminate\Support\Str::random(60),
         ];
     }
 
