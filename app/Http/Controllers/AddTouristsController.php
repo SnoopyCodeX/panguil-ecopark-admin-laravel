@@ -29,8 +29,6 @@ class AddTouristsController extends Controller
 
         $user = new User();
         $user->name = $touristName;
-        $user->email = '_';
-        $user->password = '_';
         $user->gender = $gender;
         $user->age = $age;
         $user->cellphone_number = $cellphoneNumber;
