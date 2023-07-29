@@ -1,4 +1,3 @@
-<script src="{{ asset('assets/vendors/core/core.js') }}"></script>
 <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
 
 <div class="col-lg-5 col-xl-4 grid-margin grid-margin-xl-0 stretch-card" style="max-height: 525px; height: 525px;">
@@ -19,7 +18,7 @@
                                 <p class="text-muted tx-12" id="time-created-{{ $reminder->id }}">
                                     @if (\Carbon\Carbon::parse($reminder->created_at)->isPast())
                                         <script>
-                                            $('#time-created-{{ $reminder->id }}').html(`${moment('{{ $reminder->created_at }}').fromNow()}`)
+                                            document.querySelector('#time-created-{{ $reminder->id }}').innerHTML = `${moment('{{ $reminder->created_at }}').fromNow()}`;
                                         </script>
                                     @else
                                         {{ \Carbon\Carbon::parse($reminder->created_at)->format('h:i A') }}
