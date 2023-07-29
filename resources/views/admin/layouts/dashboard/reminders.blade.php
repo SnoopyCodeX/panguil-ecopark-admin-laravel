@@ -1,3 +1,6 @@
+<script src="{{ asset('assets/vendors/core/core.js') }}"></script>
+<script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
+
 <div class="col-lg-5 col-xl-4 grid-margin grid-margin-xl-0 stretch-card" style="max-height: 525px; height: 525px;">
     <div class="card">
         <div class="card-body" style="max-height: 100%; height: 100%;">
@@ -15,8 +18,6 @@
                                 <h6 class="text-body mb-2">{{ $reminder->name }}</h6>
                                 <p class="text-muted tx-12" id="time-created-{{ $reminder->id }}">
                                     @if (\Carbon\Carbon::parse($reminder->created_at)->isPast())
-                                        <script src="{{ asset('assets/vendors/core/core.js') }}"></script>
-                                        <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
                                         <script>
                                             $('#time-created-{{ $reminder->id }}').html(`${moment('{{ $reminder->created_at }}').fromNow()}`)
                                         </script>
