@@ -13,9 +13,13 @@
                         <div class="w-100">
                             <div class="d-flex justify-content-between">
                                 <h6 class="text-body mb-2">{{ $reminder->name }}</h6>
-                                <p class="text-muted tx-12">
+                                <p class="text-muted tx-12" id="time-created-{{ $reminder->id }}">
                                     @if (\Carbon\Carbon::parse($reminder->created_at)->isPast())
-                                        {{ \Carbon\Carbon::parse($reminder->created_at)->diffForHumans() }}
+                                        <script src="{{ asset('assets/vendors/core/core.js') }}"></script>
+                                        <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
+                                        <script>
+                                            $('#time-created-{{ $reminder->id }}').html(`${moment('{{ $reminder->created_at }}').fromNow()}`)
+                                        </script>
                                     @else
                                         {{ \Carbon\Carbon::parse($reminder->created_at)->format('h:i A') }}
                                     @endif
