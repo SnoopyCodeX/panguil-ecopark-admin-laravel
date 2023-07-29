@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $quickSummaries = $this->quickSummaries();
         $totalTouristsVisited = $this->totalTouristsVisited();
 
-        $reminders = Reminder::paginate(10);
+        $reminders = Reminder::orderBy('created_at', 'desc')->paginate(10);
         $reminders->setPath('/admin/dashboard/');
 
         $page = 'dashboard';
