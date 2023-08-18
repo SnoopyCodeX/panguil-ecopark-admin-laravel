@@ -20,7 +20,7 @@ Route::post('register', [AuthController::class, 'apiRegister']);
 Route::get('check-authentication', [AuthController::class, 'apiCheckAuthentication']);
 
 Route::middleware(['jwt.auth', 'jwt.not_revoked'])->prefix('user')->group(function() {
-    Route::get('logout', [AuthController::class, 'apiLogout']);
+    Route::post('logout', [AuthController::class, 'apiLogout']);
 
 
 });
