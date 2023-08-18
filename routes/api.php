@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->group(function() {
-//     Route::get('/admin/dashboard/quicksummaries', [DashboardController::class, 'quickSummaries'])->name('api.dashboard.quickSummaries');
-//     Route::get('/admin/dashboard/touristsVisited', [DashboardController::class, 'totalTouristsVisited'])->name('api.dashboard.touristsVisited');
-//     Route::get('/admin/dashboard/reminders', [DashboardController::class, 'reminders'])->name('api.dashboard.reminders');
-// });
+Route::post('login', [AuthController::class, 'apiLogin']);
+Route::post('register', [AuthController::class, 'apiRegister']);
+Route::get('check-authentication', [AuthController::class, 'apiCheckAuthentication']);
+
+Route::middleware(['jwt.auth', 'jwt.not_revoked'])->prefix('user')->group(function() {
+    Route::get('logout', [AuthController::class, 'apiLogout']);
+
+
+});
