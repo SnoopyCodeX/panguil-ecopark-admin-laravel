@@ -84,8 +84,9 @@ class AuthController extends Controller
 
         $user = Auth::user();
         $user->photo = asset('uploads/profiles' . $user->photo);
+        $user->authentication_token = $token;
+
         return response()->json([
-            'token' => $token,
             'user' => $user,
         ]);
     }
@@ -95,12 +96,10 @@ class AuthController extends Controller
         $registerRequest->validated();
 
         $credentials = $registerRequest->safe()->all();
-        $credentials['name'] = $credentials['firstname'] . (' ' . (!array_key_exists('middlename', $credentials) ? '' : $credentials['middlename'] . ' ')) . $credentials['lastname'];
         $credentials['password'] = Hash::make($credentials['password']);
-        $filteredCredentials = array_filter($credentials, fn ($value, $key) => ($key != 'firstname' && $key != 'middlename' && $key != 'lastname'), ARRAY_FILTER_USE_BOTH);
 
         $user = User::create([
-            ...$filteredCredentials,
+            ...$credentials,
             'assign_datetime' => \Carbon\Carbon::now()->format('Y-m-d h:i:s'),
             'type' => 'tourist',
         ]);
@@ -125,13 +124,13 @@ class AuthController extends Controller
         try {
             JWTAuth::parseToken()->checkOrFail();
         } catch (TokenExpiredException $jwtTokenExpiredException) {
-            return response()->json(['error' => 'Token has expired', 'is_authenticated' => 'false']);
+            return response()->json(['error' => 'Token has expired', 'is_authenticated' => false]);
         } catch (TokenInvalidException $jwtTokenInvalidException) {
-            return response()->json(['error' => 'Invalid token was received', 'is_authenticated' => 'false']);
+            return response()->json(['error' => 'Invalid token was received', 'is_authenticated' => false]);
         } catch (JWTException $jwtException) {
-            return response()->json(['error' => 'Token is not found or malformed', 'is_authenticated' => 'false']);
+            return response()->json(['error' => 'Token is not found or malformed', 'is_authenticated' => false]);
         }
 
-        return response()->json(['is_authenticated' => 'true']);
+        return response()->json(['is_authenticated' => true]);
     }
 }
