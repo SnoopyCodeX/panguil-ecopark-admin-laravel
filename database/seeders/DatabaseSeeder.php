@@ -23,5 +23,12 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('test123'),
             'type' => 'admin',
         ]);
+
+        $this->call([
+            ReminderSeeder::class,
+            ReservationSeeder::class,
+            TouristSeeder::class,
+            TouristsToGuideSeeder::class,
+        ]);
     }
 }
