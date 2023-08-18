@@ -22,14 +22,12 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstname' => ['required', 'string', 'max:255'],
-            'middlename' => ['string', 'nullable', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'gender' => ['required', 'string', 'max:255'],
             'age' => ['required', 'integer'],
             'cellphone_number' => ['required', 'string', 'min:11', 'max:12'],
             'email' => ['required', 'unique:users', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:4'],
+            'password' => ['required', 'string', 'min:6'],
         ];
     }
 
@@ -41,9 +39,7 @@ class UserRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'firstname.required' => 'The first name field is required.',
-            'lastname.required' => 'The last name field is required.',
-            'gender.required' => 'The gender field is required.',
+            'name.required' => 'The first name field is required.',
             'age.required' => 'The age field is required.',
             'age.integer' => 'The age must be an integer.',
             'cellphone_number.required' => 'The cellphone number field is required.',
