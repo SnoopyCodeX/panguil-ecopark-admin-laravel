@@ -22,5 +22,8 @@ Route::get('check-authentication', [AuthController::class, 'apiCheckAuthenticati
 Route::middleware(['jwt.auth', 'jwt.not_revoked'])->prefix('user')->group(function() {
     Route::post('logout', [AuthController::class, 'apiLogout']);
 
-
+    Route::get('{id}/contacts', [UserController::class, 'getContacts']);
+    Route::post('{id}/contacts/add', [UserController::class, 'addNewContact']);
+    Route::post('{id}/contacts/{contactId}/update', [UserController::class, 'updateContact']);
+    Route::post('{id}/contacts/send-custom-message', [UserController::class, 'sendCustomMessage']);
 });
