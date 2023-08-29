@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('age');
             $table->string('contact_number', 12);
             $table->integer('number_of_tourists');
-            $table->integer('assigned_tour_guide');
+            $table->string('assigned_tour_guide');
             $table->timestamps();
         });
     }
