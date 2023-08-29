@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -36,10 +37,18 @@ class AuthController extends Controller
         $credentials = $loginRequest->safe()->only(['email', 'password']);
         $remember = $loginRequest->safe()->only('remember_me')['remember_me'] ?? 'off';
 
+        // Check if the user's account is locked due to rate limiting
+        if ($this->hasTooManyLoginAttempts($loginRequest)) {
+            return back()->with('error', 'Too many login attempts, try again later after 5 minutes.')->withInput();
+        }
+
         if(Auth::attempt($credentials, $remember == 'on')) {
             $loginRequest->session()->regenerate();
             return redirect('/admin/dashboard')->with('success', $loginRequest->all());
         }
+
+        // Authentication failed, increment the rate limiter
+        $this->incrementLoginAttempts($loginRequest);
 
         return back()->with('error', 'Failed to login, email or password is incorrect!')->withInput();
     }
@@ -61,6 +70,14 @@ class AuthController extends Controller
         $credentials = $loginRequest->safe()->only(['email', 'password']);
         $remember = $loginRequest->safe()->only('remember_me')['remember_me'] ?? 'off';
 
+        // Check if the user's account is locked due to rate limiting
+        if ($this->hasTooManyLoginAttempts($loginRequest)) {
+            return response()->json([
+                'hasError' => true,
+                'message' => 'Too many login attempts, try again later after 5 minutes.'
+            ], 429);
+        }
+
         try {
             // Attempt to login the user using the credentials sent.
             // If the user wants to remember its session, set the
@@ -69,6 +86,9 @@ class AuthController extends Controller
 
             if(!$token = JWTAuth::attempt($credentials, ['exp' => \Carbon\Carbon::now()->addDays($remember == 'on' ? 30 : 1)->timestamp])) {
                 $user = User::where('email', $credentials['email'])->first();
+
+                // Authentication failed, increment the rate limiter
+                $this->incrementLoginAttempts($loginRequest);
 
                 if(!$user)
                     return response()->json(['error' => 'Invalid email address'], 401);
@@ -132,5 +152,41 @@ class AuthController extends Controller
         }
 
         return response()->json(['is_authenticated' => true]);
+    }
+
+    protected function hasTooManyLoginAttempts(Request $request): bool
+    {
+        return $this->limiter()->tooManyAttempts(
+            $this->throttleKey($request),
+            $this->maxLoginAttempts()
+        );
+    }
+
+    protected function incrementLoginAttempts(Request $request): void
+    {
+        $this->limiter()->hit(
+            $this->throttleKey($request),
+            $this->lockoutTime()
+        );
+    }
+
+    protected function throttleKey(Request $request): string
+    {
+        return Str::lower($request->input('email')) . '|' . $request->ip();
+    }
+
+    protected function maxLoginAttempts(): int
+    {
+        return 3; // Adjust as needed
+    }
+
+    protected function lockoutTime(): int
+    {
+        return 60 * 5; // Time in minutes to lockout after too many attempts
+    }
+
+    protected function limiter() : \Illuminate\Cache\RateLimiter
+    {
+        return app(\Illuminate\Cache\RateLimiter::class);
     }
 }
