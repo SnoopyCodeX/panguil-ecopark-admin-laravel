@@ -24,12 +24,12 @@ class AddUserContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:users,id'],
-            'contact_name' => ['required', Rule::unique('user_contacts')->where(function (Builder $query) {
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'contact_name' => ['required', 'string', Rule::unique('user_contacts')->where(function (Builder $query) {
                 return $query->where('user_id', $this->user_id);
             })],
-            'contact_number' => ['required'],
-            'contact_role' => ['required'],
+            'contact_number' => ['required', 'string'],
+            'contact_role' => ['required', 'string'],
         ];
     }
 
