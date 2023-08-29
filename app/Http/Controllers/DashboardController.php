@@ -22,7 +22,12 @@ class DashboardController extends Controller
         $reminders = Reminder::orderBy('created_at', 'desc')->paginate(10);
 
         foreach ($reminders as $reminder) {
-            $reminder->profile = asset('uploads/profiles/' . $reminder->user()->first()->photo);
+            // Ternary operation is added to account for when
+            // seeder is used to create reminders
+            $reminder->profile = $reminder->user()->first() == null
+                ? $reminder->profile
+                : asset('uploads/profiles/' . $reminder->user()->first()->photo);
+
             $reminder->name = $reminder->user()->first()->name;
         }
 
