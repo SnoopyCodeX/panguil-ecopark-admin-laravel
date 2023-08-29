@@ -25,7 +25,7 @@ This admin system was built and made specifically for Panguil EcoPark and Resort
 
 ## Project Preview
 
-![dashboard](./screenshots/dashboard.png)
+![dashboard](./screenshots/dashboard.png) 
 
 ![live-map-tracking](./screenshots/live-map-tracking.png)
 
