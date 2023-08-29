@@ -325,6 +325,20 @@
 
 @section('dashboard')
     <div class="page-content">
+        @if($errors->any())
+            <div class="row">
+                <div class="alert alert-danger mb-4" role="alert">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            @if (!empty($error))
+                                <li>{{ $error }}</li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <!-- Quick Summary row -->
         <div class="row">
             @include('admin.layouts.dashboard.quick-summary')
