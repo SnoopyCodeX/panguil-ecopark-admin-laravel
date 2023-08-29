@@ -20,12 +20,19 @@ class DashboardController extends Controller
         $totalTouristsVisited = $this->totalTouristsVisited();
 
         $reminders = Reminder::orderBy('created_at', 'desc')->paginate(10);
+
+        foreach ($reminders as $reminder) {
+            $reminder->profile = asset('uploads/profiles/' . $reminder->user()->first()->photo);
+            $reminder->name = $reminder->user()->first()->name;
+        }
+
         $reminders->setPath('/admin/dashboard/');
 
         $page = 'dashboard';
 
-        if($request->ajax())
+        if($request->ajax()) {
             return $reminders;
+        }
 
         return view("admin.dashboard", compact('page', 'quickSummaries', 'totalTouristsVisited', 'reminders'));
     }
@@ -96,6 +103,7 @@ class DashboardController extends Controller
 
         Reminder::create([
             'name' => Auth::user()->name,
+            'user_id' => Auth::user()->id,
             'content' => $validated['reminder-content'],
             'profile' => asset('uploads/profiles/' . Auth::user()->photo),
         ]);
