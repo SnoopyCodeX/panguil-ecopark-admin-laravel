@@ -24,7 +24,7 @@ class ReservationFactory extends Factory
             'age' => fake()->numberBetween(18, 65),
             'contact_number' => substr(fake()->phoneNumber(), 0, 12),
             'number_of_tourists' => fake()->randomNumber(),
-            'assigned_tour_guide' => fake()->randomNumber()
+            'assigned_tour_guide' => fake()->name()
         ];
     }
 }
