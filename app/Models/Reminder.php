@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Reminder
@@ -24,11 +25,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Reminder whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reminder whereProfile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reminder whereUpdatedAt($value)
+ * @property-read \App\Models\User|null $user
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Reminder extends Model
 {
     use HasFactory;
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +44,7 @@ class Reminder extends Model
      */
     protected $fillable = [
         'name',
+        'user_id',
         'content',
         'profile',
     ];
