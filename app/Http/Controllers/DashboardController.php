@@ -28,7 +28,11 @@ class DashboardController extends Controller
                 ? $reminder->profile
                 : asset('uploads/profiles/' . $reminder->user()->first()->photo);
 
-            $reminder->name = $reminder->user()->first()->name;
+            // Ternary operation is added to account for when
+            // seeder is used to create reminders
+            $reminder->name = $reminder->user()->first() == null
+                ? $reminder->name
+                : $reminder->user()->first()->name;
         }
 
         $reminders->setPath('/admin/dashboard/');
