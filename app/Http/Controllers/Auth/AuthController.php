@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UserLoginRequest;
 use App\Http\Requests\Auth\UserLogoutRequest;
-use App\Http\Requests\auth\UserRegisterRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Models\RevokedToken;
 use App\Models\User;
 use Illuminate\Http\Request;
