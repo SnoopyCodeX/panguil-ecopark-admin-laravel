@@ -18,6 +18,7 @@ class ReminderFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'user_id' => fake()->numberBetween(1,50),
             'content' => fake()->sentence(),
             'profile' => 'https://via.placeholder.com/35x35',
         ];
