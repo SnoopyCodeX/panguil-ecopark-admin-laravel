@@ -1,10 +1,12 @@
 @extends('admin.index')
 
 @section('reservations-css')
+<link rel="stylesheet" href="{{ asset('assets/vendors/flatpickr/flatpickr.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
 @endsection
 
 @section('reservations-scripts')
+<script src="{{ asset('assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
 <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
@@ -44,10 +46,25 @@
     </nav>
 
     <div class="row">
+        @if($errors->any())
+            <div class="alert alert-danger mb-4" role="alert">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        @if (!empty($error))
+                            <li>{{ $error }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Tourist Reservations</h6>
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <h6 class="card-title">Tourist Reservations</h6>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newReservationModal"><i class="link-icon" data-feather="plus"></i> New Reservation</button>
+                    </div>
                     <p class="text-muted mb-3">List of tourist reservations along with their complete information and assigned tour guide.</p>
                     <div class="table-responsive">
                         <table id="reservationsTable" class="table">
@@ -68,6 +85,82 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Reservation Modal -->
+    <div class="modal fade" id="newReservationModal" tabindex="-1" aria-labelledby="newReservationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newReservationModalLabel">Add Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+
+                <form action="{{ route('admin.add-reservation') }}" method="post" autocomplete="off">
+                    @csrf
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input id="name" class="form-control" name="name" type="text" placeholder="Enter fullname..." value="{{ old('name') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="gender" value="male" id="gender1" @if(!empty(old('gender')) && old('gender') === 'male') checked @endif>
+                                    <label class="form-check-label" for="gender1">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="gender" value="female" id="gender2" @if(!empty(old('gender')) && old('gender') === 'female') checked @endif>
+                                    <label class="form-check-label" for="gender2">
+                                        Female
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input id="age" class="form-control" name="age" type="number" placeholder="Enter age..." value="{{ old('age') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contact_number" class="form-label">Contact Number</label>
+                            <input id="contact_number" class="form-control" name="contact_number" type="phone" placeholder="Enter contact number..." value="{{ old('contact_number') }}">
+                        </div>
+
+                        {{-- <div class="mb-3">
+                            <label class="form-label">Reservation Date/Time</label>
+                            <div class="input-group flatpickr" id="flatpickr-datetime-assign-reservation">
+                                <input type="text" class="form-control" placeholder="Select date" data-input name="assigned_reservation_datetime" required>
+                                <span class="input-group-text input-group-addon" data-toggle><i data-feather="calendar"></i></span>
+                            </div>
+                        </div> --}}
+
+                        <div class="mb-3">
+                            <label for="number_of_tourist" class="form-label">Number of tourist</label>
+                            <input id="number_of_tourist" class="form-control" name="number_of_tourist" type="number" placeholder="Enter number of tourist..." value="{{ old('number_of_tourist') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tour_guide_name" class="form-label">Tour Guide Name</label>
+                            <input id="tour_guide_name" class="form-control" name="tour_guide_name" type="text" placeholder="Enter tour guide name..." value="{{ old('tour_guide_name') }}">
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info">Add</button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
