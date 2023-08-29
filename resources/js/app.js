@@ -70,6 +70,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    if(url.endsWith('reservations')) {
+        if($('#flatpickr-datetime-assign-reservation').length) {
+            flatpickr("#flatpickr-datetime-assign-reservation", {
+            wrap: true,
+            dateFormat: "Y-m-d \\/ h:i K",
+            enableTime: true,
+            });
+        }
+    }
+
     if(url.endsWith('add-tourist')) {
         if($('#flatpickr-datetime-add-tourist').length) {
             flatpickr("#flatpickr-datetime-add-tourist", {
