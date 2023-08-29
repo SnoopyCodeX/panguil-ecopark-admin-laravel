@@ -1,4 +1,5 @@
-<link href="{{ asset('assets/vendors/toastr.js/toastr.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/vendors/prismjs/themes/prism.css') }}" rel="stylesheet" />
+
 <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/toastr.js/toastr.min.js') }}"></script>
 
@@ -9,7 +10,10 @@
                 <h6 class="card-title mb-0">
                     Reminders
                 </h6>
-                <button class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#newReminderModal"><i class="link-icon" data-feather="plus"></i> New Reminder</button>
+                <button class="btn btn-xs btn-icon-text btn-primary" data-bs-toggle="modal" data-bs-target="#newReminderModal">
+                    <i data-feather="plus"></i>
+                    New Reminder
+                </button>
             </div>
             <div class="d-flex flex-column reminders-container" style="max-height: 100%; height: 100%;"
                 id="reminders-container">
