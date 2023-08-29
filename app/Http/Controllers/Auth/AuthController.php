@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials, $remember == 'on')) {
             $loginRequest->session()->regenerate();
-            return redirect('/admin/dashboard')->with('success', $loginRequest->all());
+            return redirect('/admin/dashboard');
         }
 
         // Authentication failed, increment the rate limiter
