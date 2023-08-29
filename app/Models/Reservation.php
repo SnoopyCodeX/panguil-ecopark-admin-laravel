@@ -46,7 +46,7 @@ class Reservation extends Model
         'gender',
         'age',
         'contact_number',
-        'nuumber_of_tourists',
+        'number_of_tourists',
         'assigned_tour_guide',
     ];
 }
