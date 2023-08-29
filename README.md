@@ -36,20 +36,20 @@ This admin system was built and made specifically for Panguil EcoPark and Resort
 
 Download dependencies:
 
-```
+```bash
 composer install
 npm install
 ```
 
 Copy .env.example to .env file:
 
-```
+```bash
 cp .env.example .env
 ```
 
 Run artisan command:
 
-```
+```bash
 php artisan key:generate
 ```
 
@@ -67,13 +67,13 @@ PUSHER_APP_SECRET=[YOUR PUSHER APP SECRET]
 
 Next, run migration to generate all the tables:
 
-```
+```bash
 php artisan migrate
 ```
 
 Next, run this command to create a default admin account for the system:
 
-```
+```bash
 php artisan app:create-admin
 ```
 
@@ -86,7 +86,7 @@ Password: test123
 
 Next, run this command twice (*for some reason it doesn't take effect by running once*) if you want to run the system in development mode:
 
-```
+```bash
 php artisan app:run-as-dev
 ```
 
@@ -94,13 +94,24 @@ Hit `Ctrl+C` to stop and then execute it again. Then it will work, then just ope
 
 To run the system in production mode, you just do the same thing but with this command:
 
-```
+```bash
 php artisan app:run-as-prod
 ```
 
 *Note: When executing `php artisan app:run-as-dev` and `php artisan app:run-as-prod` while in __production mode__, you will be prompted in the console. When that happens, just type `yes` on each prompts and press `Enter`.*
 
+## Generating PHP Docs
 
+Just execute these commands:
+
+```bash
+# Generate php docs for laravel facades
+php artisan ide-helper:generate
+
+# Generate php docs for laravel models
+# You will be prompted in the console, just type no.
+php artisan ide-helper:models
+```
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
