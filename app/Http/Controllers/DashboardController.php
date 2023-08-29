@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddReminderRequest;
 use App\Models\Reminder;
 use App\Models\Reservation;
 use App\Models\TouristsToGuide;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -86,6 +88,19 @@ class DashboardController extends Controller
         }
 
         return ['data' => $yearMonthRange];
+    }
+
+    public function addReminder(AddReminderRequest $request)
+    {
+        $validated = $request->validated();
+
+        Reminder::create([
+            'name' => Auth::user()->name,
+            'content' => $validated['reminder-content'],
+            'profile' => asset('uploads/profiles/' . Auth::user()->photo),
+        ]);
+
+        return redirect()->back()->with('success', 'Added new reminder successfully!');
     }
 
 
