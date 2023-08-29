@@ -2,16 +2,6 @@
 <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/toastr.js/toastr.min.js') }}"></script>
 
-<script>
-    $(document).on("DOMContentLoaded", function() {
-        @if(Session::has('error'))
-            toastr.error("{{ Session::get('error') }}");
-        @elseif(Session::has('success'))
-            toastr.success("{{ Session::get('success') }}");
-        @endif
-    });
-</script>
-
 <div class="col-lg-5 col-xl-4 grid-margin grid-margin-xl-0 stretch-card" style="max-height: 530px; height: 530px;">
     <div class="card">
         <div class="card-body" style="max-height: 100%; height: 100%;">
