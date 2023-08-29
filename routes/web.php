@@ -33,7 +33,10 @@ Route::middleware('auth')->prefix('admin')->group(function() {
 
     Route::get('/account/logout', [AuthController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/dashboard/reminders/add', [DashboardController::class, 'addReminder'])->name('admin.add-reminder');
+
     Route::get('/reservations', [ReservationsController::class, 'index'])->name('admin.reservations');
+    Route::post('/reservations/add', [ReservationsController::class, 'addReservation'])->name('admin.add-reservation');
 
     Route::get('/registered-tourists', [RegisteredTouristsController::class, 'index'])->name('admin.registered-tourists');
     Route::get('/add-tourist', [AddTouristsController::class, 'index'])->name('admin.add-tourist');
