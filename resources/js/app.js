@@ -1,4 +1,4 @@
-import Pusher from 'pusher-js';
+import Pubnub from 'pubnub';
 import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,8 +8,38 @@ document.addEventListener('DOMContentLoaded', function() {
     let markers = {};
     let map = undefined;
 
-    let pusher = new Pusher(`${import.meta.env.VITE_PUSHER_APP_KEY}`, {
-        cluster: `${import.meta.env.VITE_PUSHER_APP_CLUSTER}`
+    let pubnub = new Pubnub({
+        publishKey: `${import.meta.env.VITE_PUBNUB_PUBLISH_KEY}`,
+        subscribeKey: `${import.meta.env.VITE_PUBNUB_SUBSCRIBE_KEY}`,
+        secretKey: `${import.meta.env.VITE_PUBNUB_SECRET_KEY}`,
+        userId: `${user.name}-${user.id}`,
+    });
+
+    let listener = {
+        status: (statusEvent) => {
+            if(statusEvent.category === 'PNConnectedCategory') {
+                console.log('Pubnub connection established!');
+            }
+        },
+        message: (messageEvent) => {
+            let messageContent = messageEvent.message;
+            let message = JSON.parse(messageContent);
+
+            // If the message type is not a location, ignore it.
+            if(message.type != 'location') return;
+
+            let locationData = message.data;
+            userLocations[locationData.id] = {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude};
+            updateUserLocationsInLS(userLocations);
+
+            if(url.endsWith('tracking'))
+                updateMarker(locationData.id, {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude});
+        }
+    };
+
+    pubnub.addListener(listener);
+    pubnub.subscribe({
+        channels: [`${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`]
     });
 
     let updateMap = () => {
@@ -30,15 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     let updateUserLocationsInLS = (newUserLocations) => window.sessionStorage.setItem('user-locations', JSON.stringify(newUserLocations));
-
-    let mapChannel = pusher.subscribe('map-channel');
-    mapChannel.bind('update-user-location', (data) => {
-        userLocations[data.id] = {...data.data};
-        updateUserLocationsInLS(userLocations);
-
-        if(url.endsWith('tracking'))
-            updateMarker(data.id, data.data);
-    });
 
     if(url.endsWith('tracking')) {
         map = L.map('map').setView(ecoParkLtLng, 18);
