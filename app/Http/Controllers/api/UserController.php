@@ -65,6 +65,7 @@ class UserController extends Controller
     public function sendCustomMessage(Request $request, int $id)
     {
         $user = User::find($id);
+        $validated = $request->validated();
 
         if($user) {
             $contacts = UserContact::join('users', 'user_contacts.contact_name', '=', 'users.name')
@@ -93,7 +94,7 @@ class UserController extends Controller
                         "type" => "message",
                         "data" => [
                             "sender_name" => $user->name,
-                            "message" => "",
+                            "message" => $validated['message'],
                             "receiver_ids" => $recepientIds,
                         ]
                     ])
