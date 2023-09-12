@@ -14,10 +14,10 @@
         "pubnub/pubnub": "^6.0",
         "snoopycodex/laravel-set-env-fork": "^1.0",
         "tymon/jwt-auth": "^2.0",
-        "yajra/laravel-datatables": "^10.0"
+        "yajra/laravel-datatables": "^10.0",
+        "barryvdh/laravel-ide-helper": "^2.13"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
