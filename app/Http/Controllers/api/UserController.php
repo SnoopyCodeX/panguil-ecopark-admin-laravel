@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AddUserContactRequest;
+use App\Http\Requests\Api\SendCustomMessageRequest;
 use App\Models\User;
 use App\Models\UserContact;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class UserController extends Controller
         return response()->json(['message' => 'User was not found', 'hasError' => true], 404);
     }
 
-    public function sendCustomMessage(Request $request, int $id)
+    public function sendCustomMessage(SendCustomMessageRequest $request, int $id)
     {
         $user = User::find($id);
         $validated = $request->validated();
