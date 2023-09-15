@@ -40,6 +40,7 @@ Download dependencies:
 ```bash
 composer install
 npm install
+npm install --dev
 ```
 
 Copy .env.example to .env file:
