@@ -8,11 +8,14 @@
     "devDependencies": {
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.5",
+        "sass": "^1.67.0",
         "vite": "^4.0.0"
     },
     "dependencies": {
         "dropify": "^0.2.2",
         "pubnub": "^7.3.1",
-        "pusher-js": "^8.2.0"
+        "pusher-js": "^8.2.0",
+        "sweetalert2": "^11.7.28",
+        "toastify-js": "^1.12.0"
     }
 }
