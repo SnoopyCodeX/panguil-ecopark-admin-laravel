@@ -12,3 +12,7 @@
     height: 100%;
     width: 100%;
   }
+
+  .undo-action, .redo-action {
+    font-size: 24px;
+  }
