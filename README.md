@@ -16,7 +16,7 @@ This admin system was built and made specifically for Panguil EcoPark and Resort
 
 ## Techs Used
 - **[Laravel v10.xx](https://laravel.com)**
-- **[Pusher.JS](https://pusher.com)**
+- **[Pubnub](https://pubnub.com)**
 - **[Vite.JS](https://vitejs.dev)**
 - **[Leaflet.JS](https://leafletjs.com)**
 - **[Mapbox Tiles](https://mapbox.com)**
@@ -25,11 +25,11 @@ This admin system was built and made specifically for Panguil EcoPark and Resort
 
 ## Project Preview
 
-![dashboard](./screenshots/dashboard.png) 
+| ![dashboard](./screenshots/dashboard.png) | ![live-map-tracking](./screenshots/live-map-tracking.png) |
+|-------------------------------------------|-----------------------------------------------------------|
+| ![live-map-tracking](./screenshots/live-map-tracking-2.png) | |
 
-![live-map-tracking](./screenshots/live-map-tracking.png)
-
-![live-map-tracking](./screenshots/live-map-tracking-2.png)
+### Geofence editing
 
 ![geofence-editor](./screenshots/showcase-geofence-editor-map.gif)
 
@@ -55,16 +55,18 @@ Run artisan command:
 php artisan key:generate
 ```
 
-Next, open `.env` file and find and replace these keys' values with your own [pusher](https://pusher.com) account credentials and database credentials:
+Next, open `.env` file and find and replace these keys' values with your own [pubnub](https://pubnub.com) account credentials and database credentials.
+Create an account at [pubnub.com](https://pubnub.com) to get your own credentials if you don't have one.
 
-```
+```env
 DB_DATABASE=[YOUR DATABASE NAME]
 DB_USERNAME=[YOUR DATABASE USERNAME]
 DB_PASSWORD=[YOUR DATABASE PASSWORD]
 
-PUSHER_APP_ID=[YOUR PUSHER APP ID]
-PUSHER_APP_KEY=[YOUR PUSHER APP KEY]
-PUSHER_APP_SECRET=[YOUR PUSHER APP SECRET]
+PUBNUB_PUBLISH_KEY=[YOUR PUBNUB PUBLISH KEY]
+PUBNUB_SUBSCRIBE_KEY=[YOUR PUBNUB SUBSCRIBE KEY]
+PUBNUB_SECRET_KEY=[YOUR PUBNUB SECRET KEY]
+PUBNUB_CHANNEL_NAME=[YOUR CUSTOM CHANNEL NAME]
 ```
 
 Next, run migration to generate all the tables:
