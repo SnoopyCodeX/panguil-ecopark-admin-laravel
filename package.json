@@ -12,6 +12,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@turf/turf": "^6.5.0",
         "dropify": "^0.2.2",
         "pubnub": "^7.3.1",
         "pusher-js": "^8.2.0",
