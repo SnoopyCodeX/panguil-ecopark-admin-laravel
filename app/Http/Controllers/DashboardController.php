@@ -50,11 +50,11 @@ class DashboardController extends Controller
     {
         $totalRegisteredTouristsCount = $this->__countRegisteredTourists();
         $totalReservations = $this->__countReservations();
-        $totalTouristsToGuide = $this->__countTouristsToGuide();
+        // $totalTouristsToGuide = $this->__countTouristsToGuide();
 
         $perDayRT = $this->__perDayCountRT();
         $perDayRV = $this->__perDayCountRV();
-        $perDayTTG = $this->__perDayCountTTG();
+        // $perDayTTG = $this->__perDayCountTTG();
 
         $prevCurrRT = $this->__countPrevCurrRT();
         $prevCurrRV = $this->__countPrevCurrRV();
@@ -65,7 +65,7 @@ class DashboardController extends Controller
 
         $percentageRT = $this->__getPercentage($prevCurrRT[$prev->format('Y-m-d')], $prevCurrRT[$now->format('Y-m-d')]);
         $percentageRV = $this->__getPercentage($prevCurrRV[$prev->format('Y-m-d')], $prevCurrRV[$now->format('Y-m-d')]);
-        $percentageTTG = $this->__getPercentage($prevCurrTTG[$prev->format('Y-m-d')], $prevCurrTTG[$now->format('Y-m-d')]);
+        // $percentageTTG = $this->__getPercentage($prevCurrTTG[$prev->format('Y-m-d')], $prevCurrTTG[$now->format('Y-m-d')]);
 
         return [
             'registered_tourists' => [
@@ -79,10 +79,15 @@ class DashboardController extends Controller
                 'per_day_graph_count' => $perDayRV,
             ],
             'tourists_to_guide' => [
-                'total_count' => $totalTouristsToGuide,
-                'percentage' => $this->__hasDecimal($percentageTTG) ? number_format((float) $percentageTTG, 2) : $percentageTTG,
-                'per_day_graph_count' => $perDayTTG,
+                'total_count' => $totalRegisteredTouristsCount,
+                'percentage' => $this->__hasDecimal($percentageRT) ? number_format((float) $percentageRT, 2) : $percentageRT,
+                'per_day_graph_count' => $perDayRT,
             ],
+            // 'tourists_to_guide' => [
+            //     'total_count' => $totalTouristsToGuide,
+            //     'percentage' => $this->__hasDecimal($percentageTTG) ? number_format((float) $percentageTTG, 2) : $percentageTTG,
+            //     'per_day_graph_count' => $perDayTTG,
+            // ],
         ];
     }
 
