@@ -3,7 +3,10 @@ import Pubnub from 'pubnub';
 import Swal from 'sweetalert2';
 import 'sweetalert2/src/sweetalert2.scss';
 
+import '@turf/turf';
+
 import './bootstrap';
+import { booleanPointInPolygon } from '@turf/turf';
 
 document.addEventListener('DOMContentLoaded', function() {
     const ecoParkLtLng = [14.413447, 121.480293];
@@ -43,6 +46,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if(url.endsWith('tracking'))
                 updateMarker(locationData.id, {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude});
+
+            // Store tourist's current location as a point
+            let turfPoint = point([locationData.latitude, locationData.longitude]);
+
+            // Get all geofences on the map and check if the tourist's current location is within those geofences
+            $.get(getGeofencesURL)
+                .done((geofences) => {
+                    // If there's no geofences, do nothing.
+                    if(geofences.length == 0) return;
+
+                    // Loop through each geofences
+                    geofences.forEach((geofence) => {
+                        let geojson = JSON.parse(geofence.geojson);
+
+                        if(geojson.type && geojson.type == 'circle') {}
+                        else {
+                            let turfPolygon = geojson.feature.geometry.coordinates;
+
+                            // Check if tourist's current location is within a geofence
+                            if(booleanPointInPolygon(turfPoint, turfPolygon, {ignoreBoundary: false})) {
+
+                            }
+                        }
+                    });
+                })
+                .fail((error) => {});
         }
     };
 
