@@ -1,2 +1,0 @@
-Live Tracking Panel
-    - Fix the radius of the geofence on the map
