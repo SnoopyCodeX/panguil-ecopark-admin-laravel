@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\GeofenceController;
+use App\Http\Controllers\api\TouristLocationController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::prefix('system-admin')->group(function() {
     Route::post('geofences/save', [GeofenceController::class, 'saveGeofence'])->name('system-admin.geofences.save');
     Route::post('geofences/{id}/update', [GeofenceController::class, 'updateGeofence'])->name('system-admin.geofences.update');
     Route::post('geofences/{id}/delete', [GeofenceController::class, 'deleteGeofence'])->name('system-admin.geofences.delete');
+
+    Route::get('tourist-location/{id}', [TouristLocationController::class, 'getTouristLocation']);
+    Route::post('tourist-location/{id}/save-or-update', [TouristLocationController::class, 'saveOrUpdateTouristLocation']);
 });
 
 Route::middleware(['jwt.auth', 'jwt.not_revoked'])->prefix('system-client')->group(function() {
