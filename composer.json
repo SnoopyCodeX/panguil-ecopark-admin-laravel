@@ -15,14 +15,14 @@
         "snoopycodex/laravel-set-env-fork": "^1.0",
         "tymon/jwt-auth": "^2.0",
         "yajra/laravel-datatables": "^10.0",
-        "barryvdh/laravel-ide-helper": "^2.13"
+        "barryvdh/laravel-ide-helper": "^2.13",
+        "nunomaduro/collision": "^7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },
