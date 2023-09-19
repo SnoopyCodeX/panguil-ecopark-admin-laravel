@@ -52,6 +52,9 @@
     var saveGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/save";
     var updateGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/{id}/update";
     var deleteGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/{id}/delete";
+
+    var getTouristLocationURL = "{{ route('/') }}/api/system-admin/tourist-location/{id}";
+    var saveOrUpdateTouristLocationURL = "{{ route('/') }}/api/system-admin/tourist-location/{id}/save-or-update";
 </script>
 @endsection
 

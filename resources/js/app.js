@@ -3,12 +3,11 @@ import Pubnub from 'pubnub';
 import Swal from 'sweetalert2';
 import 'sweetalert2/src/sweetalert2.scss';
 
-import '@turf/turf';
+import { booleanPointInPolygon, point } from '@turf/turf';
 
 import './bootstrap';
-import { booleanPointInPolygon } from '@turf/turf';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const ecoParkLtLng = [14.413447, 121.480293];
     let userLocations = JSON.parse(window.sessionStorage.getItem('user-locations')) ?? {};
     let url = window.location.href;
@@ -47,31 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if(url.endsWith('tracking'))
                 updateMarker(locationData.id, {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude});
 
-            // Store tourist's current location as a point
-            let turfPoint = point([locationData.latitude, locationData.longitude]);
-
-            // Get all geofences on the map and check if the tourist's current location is within those geofences
-            $.get(getGeofencesURL)
-                .done((geofences) => {
-                    // If there's no geofences, do nothing.
-                    if(geofences.length == 0) return;
-
-                    // Loop through each geofences
-                    geofences.forEach((geofence) => {
-                        let geojson = JSON.parse(geofence.geojson);
-
-                        if(geojson.type && geojson.type == 'circle') {}
-                        else {
-                            let turfPolygon = geojson.feature.geometry.coordinates;
-
-                            // Check if tourist's current location is within a geofence
-                            if(booleanPointInPolygon(turfPoint, turfPolygon, {ignoreBoundary: false})) {
-
-                            }
-                        }
-                    });
-                })
-                .fail((error) => {});
+            notifyTouristEnteredOrExitedGeofence(locationData);
         }
     };
 
@@ -133,6 +108,156 @@ document.addEventListener('DOMContentLoaded', function() {
             icon: 'error',
             title: message
         });
+    };
+
+    let notifyTouristEnteredOrExitedGeofence = (locationData) => {
+        // Get all geofences on the map and check if the tourist's current location is within those geofences
+        $.get(getGeofencesURL)
+            .done(async (geofences) => {
+                // If there's no geofences, do nothing.
+                if(geofences.length == 0) return;
+
+                // Fetch tourist's saved location in the database if there's any
+                let touristLocation = await fetch(getTouristLocationURL.replaceAll('{id}', locationData.id));
+
+                // Loop through each geofences
+                for(let geofence of geofences) {
+                    let geojson = JSON.parse(geofence.geojson);
+
+                    console.log(geojson);
+
+                    // If geofence is a circle
+                    if(geojson.type && geojson.type == 'circle') {
+                        let circleRadius = geojson.radius;
+                        let circleLatLng = [geojson.latlng.lat, geojson.latlng.lng];
+                        let touristLatlng = [locationData.latitude, locationData.longitude];
+
+                        // Check if the tourist is within the circle's radius
+                        if(map.distance(circleLatLng, touristLatlng) <= circleRadius) {
+                            // If tourist location is saved and tourist location status is not 'entered', send a notification
+                            if(!touristLocation.hasError && touristLocation.status != 'entered') {
+                                pubnub.publish({
+                                    channel: `${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`,
+                                    message: {
+                                        type: 'geofence_notification',
+                                        data: {
+                                            status: 'entered',
+                                            user_id: locationData.id
+                                        }
+                                    }
+                                });
+                            }
+
+                            // Save or update tourist location
+                            $.post(
+                                saveOrUpdateTouristLocationURL.replaceAll('{id}', locationData.id),
+                                {
+                                    user_id: locationData.id,
+                                    latitude: locationData.latitude,
+                                    longitude: locationData.longitude,
+                                    status: 'entered'
+                                })
+                                .done((result) => console.log('saved tourist location', result))
+                                .fail((result) => console.log('failed to save tourist location', result));
+
+                        } else {
+                            // If tourist location is saved and tourist location status is not 'entered', send a notification
+                            if(!touristLocation.hasError && touristLocation.status != 'exited') {
+                                pubnub.publish({
+                                    channel: `${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`,
+                                    message: {
+                                        type: 'geofence_notification',
+                                        data: {
+                                            status: 'exited',
+                                            user_id: locationData.id
+                                        }
+                                    }
+                                });
+                            }
+
+                            // Save or update tourist location
+                            $.post(
+                                saveOrUpdateTouristLocationURL.replaceAll('{id}', locationData.id),
+                                {
+                                    user_id: locationData.id,
+                                    latitude: locationData.latitude,
+                                    longitude: locationData.longitude,
+                                    status: 'exited'
+                                })
+                                .done((result) => console.log('saved tourist location', result))
+                                .fail((result) => console.log('failed to save tourist location', result));
+                        }
+
+                        break;
+                    } else {
+                        // Store tourist's current location as a point
+                        let turfPoint = point([locationData.latitude, locationData.longitude]);
+
+                        // Store geofence's coordinates as a polygon
+                        let turfPolygon = geojson.feature.geometry.coordinates;
+                        console.log(turfPolygon);
+                        console.log(geojson);
+
+                        // Check if tourist's current location is within a geofence
+                        if(booleanPointInPolygon(turfPoint, turfPolygon, {ignoreBoundary: false})) {
+                            // If tourist location is saved and tourist location status is not 'entered', send a notification
+                            if(!touristLocation.hasError && touristLocation.status != 'entered') {
+                                pubnub.publish({
+                                    channel: `${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`,
+                                    message: {
+                                        type: 'geofence_notification',
+                                        data: {
+                                            status: 'entered',
+                                            user_id: locationData.id
+                                        }
+                                    }
+                                });
+                            }
+
+                            // Save or update tourist location
+                            $.post(
+                                saveOrUpdateTouristLocationURL.replaceAll('{id}', locationData.id),
+                                {
+                                    user_id: locationData.id,
+                                    latitude: locationData.latitude,
+                                    longitude: locationData.longitude,
+                                    status: 'entered'
+                                })
+                                .done((result) => console.log('saved tourist location', result))
+                                .fail((result) => console.log('failed to save tourist location', result));
+                        } else {
+                            // If tourist location is saved and tourist location status is not 'entered', send a notification
+                            if(!touristLocation.hasError && touristLocation.status != 'exited') {
+                                pubnub.publish({
+                                    channel: `${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`,
+                                    message: {
+                                        type: 'geofence_notification',
+                                        data: {
+                                            status: 'exited',
+                                            user_id: locationData.id
+                                        }
+                                    }
+                                });
+                            }
+
+                            // Save or update tourist location
+                            $.post(
+                                saveOrUpdateTouristLocationURL.replaceAll('{id}', locationData.id),
+                                {
+                                    user_id: locationData.id,
+                                    latitude: locationData.latitude,
+                                    longitude: locationData.longitude,
+                                    status: 'exited'
+                                })
+                                .done((result) => console.log('saved tourist location', result))
+                                .fail((result) => console.log('failed to save tourist location', result));
+                        }
+
+                        break;
+                    }
+                }
+            })
+            .fail((error) => {});
     };
 
     let saveGeofence = (geojson) => {
