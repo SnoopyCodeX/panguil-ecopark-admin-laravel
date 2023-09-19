@@ -43,11 +43,55 @@ class RunAsProd extends Command
         $composer->setTimeout(null);
         $composer->start();
 
-        // Run npm run dev command
-        $this->info('Running vite js...');
-        $npmServer = new Process(['npm', 'run', 'dev']);
+        // Display composer outputs
+        while($composer->isRunning()) {
+            if ($composer->isRunning()) {
+                $output1 = $composer->getIncrementalOutput();
+
+                if(!empty($output1))
+                    $this->line("Composer: " . $output1);
+            }
+
+            usleep(100000); // Delay for 0.1 seconds
+        }
+
+        // Check if an error occured while optimizing autoloader
+        if(!$composer->isSuccessful()) {
+            $this->error('Error occured while optimizing autoloader');
+
+            if(!empty($composer->getErrorOutput()))
+                $this->error("Cause: " . $composer->getErrorOutput());
+
+            return;
+        }
+
+        // Run npm run build command
+        $this->info('Building vite js...');
+        $npmServer = new Process(['npm', 'run', 'build']);
         $npmServer->setTimeout(null);
         $npmServer->start();
+
+        // Display npm build ouputs
+        while($npmServer->isRunning()) {
+            if ($npmServer->isRunning()) {
+                $output3 = $npmServer->getIncrementalOutput();
+
+                if(!empty($output3))
+                    $this->line("NPM: " . $output3);
+            }
+
+            usleep(100000); // Delay for 0.1 seconds
+        }
+
+        // Check if an error occured while building Vite.js
+        if(!$npmServer->isSuccessful()) {
+            $this->error('Error occured while building Vite.');
+
+            if(!empty($npmServer->getErrorOutput()))
+                $this->error("Cause: " . $npmServer->getErrorOutput());
+
+            return;
+        }
 
         // Run PHP artisan serve command
         $this->info('Starting Laravel server...');
@@ -56,43 +100,25 @@ class RunAsProd extends Command
         $phpServer->start();
 
         // Display output from both processes
-        while ($phpServer->isRunning() || $npmServer->isRunning() || $composer->isRunning()) {
-            if ($composer->isRunning()) {
-                $output1 = $composer->getIncrementalOutput();
-
-                if(!empty($output1))
-                    $this->line($output1);
-            }
-
+        while ($phpServer->isRunning()) {
             if ($phpServer->isRunning()) {
                 $output2 = $phpServer->getIncrementalOutput();
 
                 if(!empty($output2))
-                    $this->line($output2);
-            }
-
-            if ($npmServer->isRunning()) {
-                $output3 = $npmServer->getIncrementalOutput();
-
-                if(!empty($output3))
-                    $this->line($output3);
+                    $this->line("Artisan: " . $output2);
             }
 
             usleep(100000); // Delay for 0.1 seconds
         }
 
-        // Check if processes were not successful
-        if (!$phpServer->isSuccessful() || !$npmServer->isSuccessful() || !$composer->isSuccessful()) {
-            $this->error('Error executing PHP server or npm or composer command.');
+        // Check if an error occured while starting laravel
+        if (!$phpServer->isSuccessful()) {
+            $this->error('Error occured while starting laravel.');
 
-            if(!empty($composer->getErrorOutput()))
-                $this->error("Cause: " . $composer->getErrorOutput());
-
-                if(!empty($phpServer->getErrorOutput()))
+            if(!empty($phpServer->getErrorOutput()))
                 $this->error("Cause: " . $phpServer->getErrorOutput());
 
-            if(!empty($npmServer->getErrorOutput()))
-                $this->error("Cause: " . $npmServer->getErrorOutput());
+            return;
         }
     }
 }

@@ -51,19 +51,19 @@ class RunAsDev extends Command
         $phpServer->start();
 
         // Display output from both processes
-        while ($phpServer->isRunning() || $npmServer->isRunning()) {
-            if ($phpServer->isRunning()) {
-                $output1 = $phpServer->getIncrementalOutput();
-
-                if(!empty($output1))
-                    $this->line($output1);
-            }
-
+        while ($npmServer->isRunning() || $phpServer->isRunning()) {
             if ($npmServer->isRunning()) {
                 $output2 = $npmServer->getIncrementalOutput();
 
                 if(!empty($output2))
                     $this->line($output2);
+            }
+
+            if ($phpServer->isRunning()) {
+                $output1 = $phpServer->getIncrementalOutput();
+
+                if(!empty($output1))
+                    $this->line($output1);
             }
 
             usleep(100000); // Delay for 0.1 seconds
