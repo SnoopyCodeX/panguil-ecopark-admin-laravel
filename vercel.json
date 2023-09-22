@@ -1,17 +1,23 @@
 {
     "version": 2,
-    "framework": null,
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.6.0" }
     },
-    "routes": [{
-        "src": "/(.*)",
-        "dest": "/api/index.php"
-    }],
+    "outputDirectory": "public",
+    "routes": [
+        {
+            "src": "/assets/(.*)",
+            "dest": "/public/assets/"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_URL": "https://panguil-ecopark-ten.vercel.app",
+        "APP_URL": "https://panguil-ecopark.vercel.app",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
