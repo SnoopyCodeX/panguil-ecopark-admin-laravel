@@ -170,6 +170,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
     ])->toArray(),
 
     /*
