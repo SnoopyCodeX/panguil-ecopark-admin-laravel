@@ -26,7 +26,7 @@ class DashboardController extends Controller
             // seeder is used to create reminders
             $reminder->profile = $reminder->user()->first() == null
                 ? $reminder->profile
-                : asset('uploads/profiles/' . $reminder->user()->first()->photo);
+                : (app()->isProduction() ? $reminder->user()->first()->photo : asset('uploads/profiles/' . $reminder->user()->first()->photo));
 
             // Ternary operation is added to account for when
             // seeder is used to create reminders
