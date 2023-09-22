@@ -27,7 +27,7 @@ class CreateAdmin extends Command
     public function handle()
     {
         $this->info('Generating key for laravel...');
-        $this->call('key:generate', []);
+        $this->call('key:generate', ['--ansi']);
         $this->call('jwt:secret');
 
         $this->call('db:seed', []);
