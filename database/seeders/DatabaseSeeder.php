@@ -15,14 +15,19 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->createOne([
-            'name' => 'Tatel Admin',
-            'age' => 25,
-            'gender' => 'female',
-            'email' => 'tatel@gmail.com',
-            'password' => Hash::make('test123'),
-            'type' => 'admin',
-        ]);
+        $hasDefaultAdmin = \App\Models\User::whereType('admin');
+
+        // If there's no default admin, create one
+        if(!$hasDefaultAdmin) {
+            \App\Models\User::factory()->createOne([
+                'name' => 'Tatel Admin',
+                'age' => 25,
+                'gender' => 'female',
+                'email' => 'tatel@gmail.com',
+                'password' => Hash::make('test123'),
+                'type' => 'admin',
+            ]);
+        }
 
         $this->call([
             ReminderSeeder::class,
