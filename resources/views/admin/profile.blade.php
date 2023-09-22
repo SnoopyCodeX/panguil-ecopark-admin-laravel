@@ -67,7 +67,7 @@
                 <div class="card rounded">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center mb-2">
-                            <img class="flex-item wd-100 rounded-circle mb-2" src="{{ asset('uploads/profiles/' . Auth::user()->photo) ?? 'https://via.placeholder.com/100x100' }}" alt="profile">
+                            <img class="flex-item wd-100 rounded-circle mb-2" src="{{ app()->isProduction() ? Auth::user()->photo : asset('uploads/profiles/' . Auth::user()->photo) ?? 'https://via.placeholder.com/100x100' }}" alt="profile">
                             <h6 class="flex-item card-title mb-0">{{ Auth::user()->name }}</h6>
                         </div>
                         <div class="mt-3">

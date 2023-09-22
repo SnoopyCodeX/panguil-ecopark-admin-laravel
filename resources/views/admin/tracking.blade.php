@@ -47,7 +47,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 <script>
-    var user = {!! auth()->user()->toJson() !!};
     var getGeofencesURL = "{{ route('system-admin.geofences') }}";
     var saveGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/save";
     var updateGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/{id}/update";

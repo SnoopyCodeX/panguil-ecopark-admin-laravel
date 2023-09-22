@@ -59,6 +59,9 @@
     </div>
 
     <!-- core:js -->
+    <script>
+        var user = JSON.parse('{!! auth()->user()->toJson() !!}');
+    </script>
     <script src="{{ asset('assets/vendors/core/core.js') }}"></script>
     <!-- endinject -->
 
