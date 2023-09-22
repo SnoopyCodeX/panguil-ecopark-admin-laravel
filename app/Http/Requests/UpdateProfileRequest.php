@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Carbon\Carbon;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
@@ -46,19 +47,27 @@ class UpdateProfileRequest extends FormRequest
 
         try {
             if($profilePhoto instanceof UploadedFile) {
-                $filename = Carbon::now()->format('Y_m_d_H_i_s-') . Str::slug($profilePhoto->getClientOriginalName(), '_');
-                $directory = public_path('uploads/profiles');
+                // If laravel is in production, upload to cloudinary
+                if(app()->isProduction()) {
+                    $result = Cloudinary::upload($profilePhoto->getRealPath());
+                    $user->photo = $result->getSecurePath();
+                }
+                // Otherwise, just upload locally
+                else {
+                    $filename = Carbon::now()->format('Y_m_d_H_i_s-') . Str::slug($profilePhoto->getClientOriginalName(), '_');
+                    $directory = public_path('uploads/profiles');
 
-                // Remove old profile photo from the uploads folder
-                if($user->photo != null)
-                    @unlink(public_path('uploads/profiles/' . $user->photo));
+                    // Remove old profile photo from the uploads folder
+                    if($user->photo != null)
+                        @unlink(public_path('uploads/profiles/' . $user->photo));
 
-                // If directory doesn't exist, create it
-                if(!File::exists($directory) && !File::isDirectory($directory))
-                    File::makeDirectory($directory, 0755, true);
+                    // If directory doesn't exist, create it
+                    if(!File::exists($directory) && !File::isDirectory($directory))
+                        File::makeDirectory($directory, 0755, true);
 
-                $profilePhoto->move($directory, $filename);
-                $user->photo = $filename;
+                    $profilePhoto->move($directory, $filename);
+                    $user->photo = $filename;
+                }
             }
         } catch(FileException $fe) {
             return redirect()->back()->with('error', 'Failed to upload profile photo. Cause: '. $fe->getMessage())->withInput();
