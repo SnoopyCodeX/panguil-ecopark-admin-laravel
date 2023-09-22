@@ -20,12 +20,12 @@ class ProfileController extends Controller
     public function updateProfile(UpdateProfileRequest $request)
     {
         $validated = $request->validated();
-        $name = $request->safe()->only(['name'])['name'] ?? '';
-        $email = $request->safe()->only(['email'])['email'] ?? '';
-        $age = $request->safe()->only(['age'])['age'] ?? '';
-        $gender = $request->safe()->only(['gender'])['gender'] ?? '';
-        $new_password = $request->safe()->only(['password'])['password'] ?? '';
-        $old_password = $request->safe()->only(['old_password'])['old_password'] ?? '';
+        $name = $validated['name'] ?? '';
+        $email = $validated['email'] ?? '';
+        $age = $validated['age'] ?? '';
+        $gender = $validated['gender'] ?? '';
+        $new_password = $validated['password'] ?? '';
+        $old_password = $validated['old_password'] ?? '';
 
         $user = User::find(Auth::user()->id);
         $user->name = empty($name) ? $user->name : $name;
