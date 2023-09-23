@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        $hasDefaultAdmin = \App\Models\User::where('type', 'admin')->first();
+        $hasDefaultAdmin = \App\Models\User::where('type', 'admin')->first() != null;
 
         // If there's no default admin, create one
         if(!$hasDefaultAdmin) {
