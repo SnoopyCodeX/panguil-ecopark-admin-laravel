@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         },
         message: (messageEvent) => {
+            console.log('Received message: ', JSON.parse(messageEvent.message));
             let messageContent = messageEvent.message;
             let message = JSON.parse(messageContent);
 
@@ -52,8 +53,36 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     pubnub.addListener(listener);
     pubnub.subscribe({
-        channels: [`${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`]
+        channels: [`${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`],
+        withPresence: true
     });
+
+    let getPreviousLocations = () => {
+        pubnub.fetchMessages({
+            channels: [`${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`],
+            includeUUID: true,
+            includeMessageType: true
+        }).then((fetchResponse) => {
+            let messageHistories = fetchResponse.channels[`${import.meta.env.VITE_PUBNUB_CHANNEL_NAME}`];
+
+            if(messageHistories == undefined) return;
+
+            messageHistories.forEach((messageHistory) => {
+                let message = messageHistory.message;
+
+                if(message.type != 'location') return;
+
+                let locationData = message.data;
+                userLocations[locationData.id] = {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude};
+                updateUserLocationsInLS(userLocations);
+
+                if(url.endsWith('tracking'))
+                    updateMarker(locationData.id, {name: locationData.name, latitude: locationData.latitude, longitude: locationData.longitude});
+            });
+        });
+    };
+
+    getPreviousLocations();
 
     let updateMap = () => {
         for(let id in userLocations)
@@ -496,7 +525,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         let tile = L.tileLayer(`https://api.mapbox.com/styles/v1/snoopycodex/clir72wpr00ko01r854fsammn/tiles/256/{z}/{x}/{y}@2x?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`, {
             maxZoom: 19,
-            minZoom: 15,
             attribution: '&copy; <a href="http://www.mapbox.com/about/maps">MapBox</a> <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
         tile.addTo(map);
@@ -512,6 +540,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         initMapGeofences(map);
+
+        setInterval(() => getPreviousLocations(), 2500);
     }
 
     if(url.endsWith('assign-tour-guide')) {
