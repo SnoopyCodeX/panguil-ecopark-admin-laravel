@@ -24,6 +24,7 @@ class CancelOrUpdateReservationRequest extends FormRequest
         return [
             'action' => ['string', 'required', 'in:cancel_reservation,update_reservation'],
             'reservation_id' => ['required', 'integer', 'exists:available_reservations,id'],
+            'tourist_reservation_id' => ['required', 'integer', 'exists:tourist_reservations,id'],
             'number_of_adults' => ['required', 'integer'],
             'number_of_children' => ['required', 'integer'],
             'reserve_date' => ['required', 'string'],

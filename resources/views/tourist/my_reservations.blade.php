@@ -154,7 +154,8 @@
                                     <div class="col">
                                         <input type="hidden" class="form-control" name="adultsTotal" id="adultsTotal{{ $reservations['id'] }}" value="{{ $adultsTotal }}">
                                         <input type="hidden" class="form-control" name="childrenTotal" id="childrenTotal{{ $reservations['id'] }}" value="{{ $childrenTotal }}">
-                                        <input type="hidden" name="reservation_id" class="form-control" value="{{ $reservations['id'] }}">
+                                        <input type="hidden" name="reservation_id" class="form-control" value="{{ $reservationType['id'] }}">
+                                        <input type="hidden" name="tourist_reservation_id" class="form-control" value="{{ $reservations['id'] }}">
 
                                         <div class="row mb-2">
                                             <div class="col-md">

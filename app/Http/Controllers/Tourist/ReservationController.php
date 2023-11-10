@@ -50,7 +50,7 @@ class ReservationController extends Controller
 
         switch($sentRequest['action']) {
             case 'cancel_reservation':
-                $reservation = TouristReservation::find($request['reservation_id']);
+                $reservation = TouristReservation::find($request['tourist_reservation_id']);
 
                 if(!$reservation->get()->isEmpty()) {
                     $reservation->delete();
@@ -62,7 +62,7 @@ class ReservationController extends Controller
                 break;
 
             case 'update_reservation':
-                $reservation = TouristReservation::find($request['reservation_id']);
+                $reservation = TouristReservation::find($request['tourist_reservation_id']);
 
                 if(!$reservation->get()->isEmpty()) {
                     $reservation->update([
