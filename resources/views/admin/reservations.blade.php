@@ -10,7 +10,7 @@
 <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
 <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
-<script>
+{{-- <script>
     $(document).on("DOMContentLoaded", function() {
         $("#reservationsTable").DataTable({
             serverSide: true,
@@ -32,11 +32,90 @@
             searching: true,
         });
     });
-</script>
+</script> --}}
 @endsection
 
 @section('reservations')
+
 <div class="page-content">
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Ecopark</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reservations</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        @if($errors->any())
+            <div class="alert alert-danger mb-4" role="alert">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        @if (!empty($error))
+                            <li>{{ $error }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <h6 class="card-title">Tourist Reservations</h6>
+                        {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newReservationModal"><i class="link-icon" data-feather="plus"></i> New Reservation</button> --}}
+                    </div>
+                    <p class="text-muted mb-3">List of tourist reservations along with their complete information and assigned tour guide.</p>
+                    <div class="table-responsive">
+                        <table id="reservationsTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Date/Time</th>
+                                    <th>Cottages/Kubo</th>
+                                    <th>Name</th>
+                                    <th>Number Of Tourist</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @if (count($reservations) > 0)
+                                    @foreach ($reservations as $reservation)
+                                        @php
+                                            $reservationType = $reservation['reservation_type'];
+                                            $adultsTotal = $reservationType['price_per_head'] * $reservation['number_of_adults'];
+                                            $childrenTotal = ($reservationType['price_per_head'] - ($reservationType['price_per_head'] * $reservationType['children_discount'])) * $reservation['number_of_children'];
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $reservation['id'] }}</td>
+                                            <td><img src="{{ $reservation['reservation_type']['photo'] }}" class="img-fluid" alt="Photo of {{ $reservation['reservation_type']['name_of_spot'] }}"></td>
+                                            <td>{{ \Carbon\Carbon::parse($reservation['reserve_date'])->format('F d, Y') . " @ " . \Carbon\Carbon::parse($reservation['arrival_time'])->format('h:i A') }}</td>
+                                            <td>{{ ucfirst($reservation['reservation_type']['name_of_spot']) }}</td>
+                                            <td>{{ $reservation['user']['name'] }}</td>
+                                            <td>{{ $reservation['number_of_adults'] . " Adults \n " . $reservation['number_of_children'] . " Children" }}</td>
+                                            <td>{{ $adultsTotal + $childrenTotal . " PHP" }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="alert alert-danger" role="alert">
+                                                There are no reservations to fetch!
+                                            </div>
+                                        </td>
+                                    </tr>
+                               @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- <div class="page-content">
 
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
@@ -135,14 +214,6 @@
                             <input id="contact_number" class="form-control" name="contact_number" type="phone" placeholder="Enter contact number..." value="{{ old('contact_number') }}">
                         </div>
 
-                        {{-- <div class="mb-3">
-                            <label class="form-label">Reservation Date/Time</label>
-                            <div class="input-group flatpickr" id="flatpickr-datetime-assign-reservation">
-                                <input type="text" class="form-control" placeholder="Select date" data-input name="assigned_reservation_datetime" required>
-                                <span class="input-group-text input-group-addon" data-toggle><i data-feather="calendar"></i></span>
-                            </div>
-                        </div> --}}
-
                         <div class="mb-3">
                             <label for="number_of_tourist" class="form-label">Number of tourist</label>
                             <input id="number_of_tourist" class="form-control" name="number_of_tourist" type="number" placeholder="Enter number of tourist..." value="{{ old('number_of_tourist') }}">
@@ -165,5 +236,5 @@
         </div>
     </div>
 
-</div>
+</div> --}}
 @endsection
