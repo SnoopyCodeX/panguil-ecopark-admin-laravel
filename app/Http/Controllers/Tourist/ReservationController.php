@@ -58,7 +58,7 @@ class ReservationController extends Controller
                 if(!$reservation->get()->isEmpty()) {
                     $reservation->delete();
 
-                    return back()->with('success', 'Successfully cancelled you reservation!');
+                    return back()->with('success', 'Successfully cancelled your reservation!');
                 } else {
                     return back()->with('error', 'Cannot the reservation that you want to cancel.');
                 }
