@@ -28,10 +28,10 @@ class ReservationController extends Controller
 
         $data = $request->safe()->all();
 
-        $existingReservationDate = TouristReservation::where('reserve_date', '=', $data['reserve_date'])->get();
+        $existingReservationDate = TouristReservation::where('reserve_date', '=', $data['reserve_date'])->where('arrival_time', '=', $data['arrival_time'])->where('reservation_id', '=', $data['reservation_id'])->get();
 
         if(!$existingReservationDate->isEmpty()) {
-            return back()->with('error', 'Another tourist has already reserved this spot on this date, please choose another date.');
+            return back()->with('error', 'Another tourist has already reserved this spot on this date and time, please choose another date.');
         }
 
         $data['user_id'] = Auth::guard('tourist')->id();
