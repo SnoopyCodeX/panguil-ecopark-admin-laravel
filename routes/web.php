@@ -10,6 +10,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredTouristsController;
 use App\Http\Controllers\ReservationsController;
 use App\Http\Controllers\TourGuidesController;
+use App\Http\Controllers\Tourist\HomeController;
+use App\Http\Controllers\Tourist\LoginController;
+use App\Http\Controllers\Tourist\MyReservationsController;
+use App\Http\Controllers\Tourist\RatingsAndReviewsController;
+use App\Http\Controllers\Tourist\RegisterController;
+use App\Http\Controllers\Tourist\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +27,7 @@ use App\Http\Controllers\TourGuidesController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware('guest')->controller(AuthController::class)->group(function() {
+Route::middleware('web')->prefix('admin')->controller(AuthController::class)->group(function() {
     Route::get('/', 'login')->name('/');
     Route::get('/login', 'login')->name('login');
 
@@ -29,8 +35,6 @@ Route::middleware('guest')->controller(AuthController::class)->group(function() 
 });
 
 Route::middleware('auth')->prefix('admin')->group(function() {
-    Route::get('/', fn () => redirect('/admin/dashboard'))->name('admin');
-
     Route::get('/account/logout', [AuthController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/dashboard/reminders/add', [DashboardController::class, 'addReminder'])->name('admin.add-reminder');
@@ -50,4 +54,27 @@ Route::middleware('auth')->prefix('admin')->group(function() {
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile');
     Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('admin.profile.update');
+});
+
+Route::middleware('web')->group(function() {
+    Route::get('/', [HomeController::class, 'index'])->name('tourist.home');
+    Route::get('/home', [HomeController::class, 'index'])->name('tourist.home');
+
+    Route::middleware('guest:tourist')->get('/login', [LoginController::class, 'index'])->name('tourist.login');
+    Route::middleware('guest:tourist')->post('/account/login', [LoginController::class, 'login'])->name('tourist.login.post');
+
+    Route::middleware('guest:tourist')->get('/register', [RegisterController::class, 'index'])->name('tourist.register');
+    Route::middleware('guest:tourist')->post('/account/register', [RegisterController::class, 'register'])->name('tourist.register.post');
+
+    Route::middleware(['auth:tourist'])->get('/my_reservations', [MyReservationsController::class, 'index'])->name('tourist.my_reservations');
+    Route::middleware(['auth:tourist'])->get('/my_account', function (Request $request) {})->name('tourist.my_account');
+    Route::middleware(['auth:tourist'])->get('/account/logout', [LoginController::class, 'logout'])->name('tourist.logout');
+
+    Route::get('/reservation', [ReservationController::class, 'index'])->name('tourist.reservation');
+    Route::middleware(['auth:tourist'])->post('/reservation/create', [ReservationController::class, 'create'])->name('tourist.reservation.create');
+    Route::middleware(['auth:tourist'])->post('/reservation/update', [ReservationController::class, 'update'])->name('tourist.reservation.update');
+
+    Route::get('/tourist_attractions', function() {})->name('tourist.tourist_attractions');
+    Route::get('/about_us', function() {})->name('tourist.about_us');
+    Route::get('/ratings_and_reviews', [RatingsAndReviewsController::class, 'index'])->name('tourist.ratings_and_reviews');
 });

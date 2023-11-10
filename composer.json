@@ -48,11 +48,6 @@
         "post-update-cmd": [
             "echo 'Executing post-update-cmd';",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
-        ],
-        "post-install-cmd": [
-            "echo 'Executing migration';",
-            "@php artisan migrate",
-            "@php artisan app:create-admin"
         ]
     },
     "extra": {

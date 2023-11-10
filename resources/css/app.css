@@ -1,18 +1,84 @@
 .reminders-container {
     overflow: auto;
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
-  }
+    scrollbar-width: none;
+    /* For Firefox */
+    -ms-overflow-style: none;
+    /* For Internet Explorer and Edge */
+}
 
-  .reminders-container::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
-  }
+.reminders-container::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari, and Opera */
+}
 
-  #map {
+#map {
     height: 100%;
     width: 100%;
-  }
+}
 
-  .undo-action, .redo-action {
+.undo-action,
+.redo-action {
     font-size: 24px;
-  }
+}
+
+.landing-heading-title {
+    font-family: rubikdirt;
+    font-size: 4rem;
+    color: #CCBE5D;
+    text-align: center;
+}
+
+/* Polaroid-like photo cards */
+.wrapper {
+    width: 100%;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.polaroid {
+    background: #fff;
+    border-radius: 2px;
+    padding: 1rem;
+    box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.6);
+
+}
+
+.polaroid>img {
+    max-width: 100%;
+    height: auto;
+}
+
+.caption {
+    font-size: 1.8rem;
+    text-align: center;
+    line-height: 1em;
+}
+
+.item {
+    width: 30%;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.item .polaroid:before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    transition: all 0.35s;
+}
+
+.item:nth-child(1) {
+    transform: rotate(-8deg);
+    margin-right: -25px;
+}
+
+.item:nth-child(2) {
+    transform: scale(1) translateY(-20px);
+}
+
+.item:nth-child(3) {
+    transform: rotate(8deg);
+    margin-left: -25px;
+}
+
+/* End Polaroid-like photo cards */
