@@ -69,7 +69,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.map-tracking') }}" class="nav-link">
                     <i class="link-icon" data-feather="map"></i>
-                    <span class="link-title">Tracking</span>
+                    <span class="link-title">Geofence</span>
                 </a>
             </li>
         </ul>
