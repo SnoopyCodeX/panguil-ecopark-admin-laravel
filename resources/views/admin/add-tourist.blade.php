@@ -23,7 +23,7 @@
     <div class="page-content">
         <nav class="page-breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin') }}">EcoPark</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">EcoPark</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Register Tourist</li>
             </ol>
         </nav>

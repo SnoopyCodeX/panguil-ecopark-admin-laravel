@@ -48,12 +48,12 @@
 <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 <script>
     var getGeofencesURL = "{{ route('system-admin.geofences') }}";
-    var saveGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/save";
-    var updateGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/{id}/update";
-    var deleteGeofenceURL = "{{ route('/') }}/api/system-admin/geofences/{id}/delete";
+    var saveGeofenceURL = "{{ route('system-admin.geofences.save') }}";
+    var updateGeofenceURL = "{{ route('tourist.index') }}/api/system-admin/geofences/{id}/update";
+    var deleteGeofenceURL = "{{ route('tourist.index') }}/api/system-admin/geofences/{id}/delete";
 
-    var getTouristLocationURL = "{{ route('/') }}/api/system-admin/tourist-location/{id}";
-    var saveOrUpdateTouristLocationURL = "{{ route('/') }}/api/system-admin/tourist-location/{id}/save-or-update";
+    var getTouristLocationURL = "{{ route('tourist.index') }}/api/system-admin/tourist-location/{id}";
+    var saveOrUpdateTouristLocationURL = "{{ route('tourist.index') }}/api/system-admin/tourist-location/{id}/save-or-update";
 </script>
 @endsection
 

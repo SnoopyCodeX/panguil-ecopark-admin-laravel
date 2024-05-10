@@ -57,7 +57,7 @@ Route::middleware('auth')->prefix('admin')->group(function() {
 });
 
 Route::middleware('web')->group(function() {
-    Route::get('/', [HomeController::class, 'index'])->name('tourist.home');
+    Route::get('/', [HomeController::class, 'index'])->name('tourist.index');
     Route::get('/home', [HomeController::class, 'index'])->name('tourist.home');
 
     Route::middleware('guest:tourist')->get('/login', [LoginController::class, 'index'])->name('tourist.login');

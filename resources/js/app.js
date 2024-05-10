@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showSuccessToast("Geofence created successfully!");
             })
             .fail(function(data) {
-                console.log('save failed');
+                console.log('save failed', data);
                 showErrorToast("Oops, something went wrong while saving the geofence to the database");
             });
 

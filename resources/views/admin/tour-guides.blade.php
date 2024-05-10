@@ -37,7 +37,7 @@
 
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin') }}">EcoPark</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">EcoPark</a></li>
             <li class="breadcrumb-item active" aria-current="page">Assigned Tour Guides</li>
         </ol>
     </nav>

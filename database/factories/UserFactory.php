@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'gender' => $gender,
             // 'contact_number' => substr(fake()->phoneNumber(), 0, 12),
             'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make(fake()->sentence()),
+            'password' => Hash::make('test123'),
             'type' => 'tourist',
         ];
     }

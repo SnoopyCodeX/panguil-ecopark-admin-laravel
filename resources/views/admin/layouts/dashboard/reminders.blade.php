@@ -20,7 +20,7 @@
                 @foreach ($reminders as $reminder)
                     <a href="javascript:;" class="d-flex align-items-center border-bottom py-3">
                         <div class="me-3">
-                            <img src="{{ $reminder->profile }}" class="rounded-circle wd-35" alt="user">
+                            <img src="{{ $reminder->profile }}" class="rounded-circle wd-40 ht-40" alt="user">
                         </div>
                         <div class="w-100">
                             <div class="d-flex justify-content-between">
